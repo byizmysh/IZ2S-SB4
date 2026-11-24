@@ -13,7 +13,7 @@ function legacyAbi(abi) {
   return abi===5 || abi===6;
 }
 function legacyReason() {
-  return 'Legacy ABI 5–6 requires the original SmileBASIC SDK and process. This build is unavailable in IZ2S.';
+  return 'Legacy ABI 5-6 requires the original SmileBASIC SDK and process. This build is unavailable in IZ2S.';
 }
 function packed(header) {
   if (header.delegated) return {compatible:false,reason:'This SD package requires a PC executor.'};

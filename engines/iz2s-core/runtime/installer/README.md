@@ -6,7 +6,7 @@ Note: You need an SD card plugged in for IZ2S core, either formatted FAT32 or EX
 
 You are not required to move any files to your SD card.
 
-1. Use 0.25's bundled `runtime/package` directory. It contains
+1. Use the bundled `runtime/package` directory. It contains
    `ro/main`, `core/main`, `game/main`, `bootstrap.bin`,
    `iz2s/izlauncher.iza`, `iz2s/izlauncher.romfs`, and `programs/`.
    The IZ2S runtime is embedded in `game/main`; no launcher NRO is needed.
@@ -197,8 +197,8 @@ from interrupted runs. A free-space check that could reject exactly enough
 space is fixed, and failures produce more useful diagnostics.
 
 These changes improve compatibility and recovery, but the exploit is still
-timing-sensitive. They are not a guarantee that every attempt—or every
-console—will succeed.
+timing-sensitive. They are not a guarantee that every attempt-or every
+console-will succeed.
 
 The host now waits up to 3 minutes of inactivity for a native-bridge request
 and up to 2 minutes for each console response after pairing. The initial

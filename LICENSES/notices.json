@@ -127,7 +127,7 @@
   {
     "path": "LICENSES/notices.json",
     "bytes": 21925,
-    "sha256": "a932a4ce920bf91da9ef33c1bffe969bb948ee81601b209c48024c0692693d1b"
+    "sha256": "b45d7ca338923f860bbab6ff3a4754b416a767a52894d0f497a917fd73dc5014"
   },
   {
     "path": "core/filesystem/ouncecake/LICENSE",

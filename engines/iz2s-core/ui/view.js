@@ -183,7 +183,7 @@ if (!(typeof module === 'object' && module.exports)) globalThis.IZ2S_CORE = (() 
         row.className = 'log-row ' + (error ? 'error' : /^\d\/4\s/.test(line) ? 'process' : 'detail');
         const time = document.createElement('time');
         time.className = 'core-log-time';
-        time.textContent = Number.isFinite(at) ? clock.format(at) : '—';
+        time.textContent = Number.isFinite(at) ? clock.format(at) : '-';
         if (Number.isFinite(at)) {
           time.dateTime = new Date(at).toISOString();
           time.title = at >= startedAt ? '+' + (at - startedAt) + ' ms' : time.dateTime;
@@ -321,9 +321,9 @@ if (!(typeof module === 'object' && module.exports)) globalThis.IZ2S_CORE = (() 
       const showMenu=!!(session&&menu?.supported);
       if(menuBox.hidden===showMenu)menuBox.hidden=!showMenu;
       if(showMenu){
-        const version=t('menuVersion',{version:menu.active||'—'});
+        const version=t('menuVersion',{version:menu.active||'-'});
         const processing=['waiting','transferring','verifying','staged','applying'].includes(menu.state);
-        const status=t('menuUpdate_'+menu.state,{version:menu.available||'—',stage:menu.interruptedAt||'—',error:menu.error?'0x'+menu.error.toString(16):'—'});
+        const status=t('menuUpdate_'+menu.state,{version:menu.available||'-',stage:menu.interruptedAt||'-',error:menu.error?'0x'+menu.error.toString(16):'-'});
         const label=t(menu.canRetry?'menuRetry':'menuUpdate');
         if(menuVersion.textContent!==version)menuVersion.textContent=version;
         if(menuButton.textContent!==label)menuButton.textContent=label;

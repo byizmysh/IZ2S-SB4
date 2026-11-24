@@ -1,4 +1,4 @@
-# Working with IZ2S SB4 0.25
+# Working with IZ2S SB4
 
 ## Install
 

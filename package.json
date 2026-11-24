@@ -2,7 +2,7 @@
   "name": "iz2s-sb4",
   "version": "0.25.2",
   "private": true,
-  "description": "IZ2S SmileBASIC 4 Edition: PC panel, console launcher and App Store",
+  "description": "Homebrew launcher for Nintendo Switch 2, designed for use with SmileBASIC 4.",
   "engines": {
     "node": ">=20.20"
   },

@@ -1,10 +1,26 @@
-# IZ2S SB4 0.25.2
+# IZ2S SB4
 
-**IZ2S SB4** is a special edition of IZ2S for use with **SmileBASIC 4**, maintained in a separate repository. It includes the PC panel, console launcher, device setup and App Store for the SmileBASIC 4 workflow.
+**IZ2S SB4** is a homebrew launcher for **Nintendo Switch 2**, designed for use with **SmileBASIC 4**. It includes the PC panel, console launcher, device setup and App Store.
 
-This project continues the SB4 line of [IZ2S Platform](https://github.com/byizmysh/IZ2S-Platform), based on version 0.25.2.
+The SmileBASIC 4 edition is maintained separately from [IZ2S Platform](https://github.com/byizmysh/IZ2S-Platform).
 
-**IZ2S SB4** — специальная сборка IZ2S для использования с **SmileBASIC 4**, выделенная в отдельный репозиторий.
+## Download
+
+| System | Download |
+| --- | --- |
+| Linux x64 / ARM64 | [Installation archive](https://github.com/byizmysh/IZ2S-SB4/releases/download/v0.25.2-sb4.1/IZ2S-SB4-0.25.2-linux.tar.gz) |
+| Windows x64 | [Installation ZIP](https://github.com/byizmysh/IZ2S-SB4/releases/download/v0.25.2-sb4.1/IZ2S-SB4-0.25.2-windows-x64.zip) |
+| Checksums | [SHA256SUMS.txt](https://github.com/byizmysh/IZ2S-SB4/releases/download/v0.25.2-sb4.1/SHA256SUMS.txt) |
+
+## Screenshots
+
+![IZ2S SB4 connection panel](docs/images/iz2s-sb4-connection.png)
+
+![IZ2S SB4 App Store](docs/images/iz2s-sb4-app-store.png)
+
+![IZ2S SB4 first setup](docs/images/iz2s-sb4-first-setup.png)
+
+![IZ2S SB4 input devices](docs/images/iz2s-sb4-devices.png)
 
 ## Before installation
 
@@ -22,7 +38,7 @@ Setup installs the missing prerequisites, verifies the installation, creates des
 
 The installer checks Python 3, Pillow, curl, tar, xz and SSH; it can install system prerequisites with your package manager and prepare Node.js 24 if needed. The installer prints the final destination.
 
-For later launches, choose **IZ2S SB4 0.25** from the application menu, or open the installed folder and run:
+For later launches, choose **IZ2S SB4** from the application menu, or open the installed folder and run:
 
 ```sh
 ./start.sh
@@ -54,7 +70,7 @@ Wait until setup prints **Installed** and opens the panel automatically. For lat
 Start.vbs
 ```
 
-The desktop and Start-menu shortcuts include the IZ2S icon and open the panel without a console window. For an existing installation, use those shortcuts or Start.vbs in the installed folder. Start.cmd is retained as a console diagnostic entry point; do not start files from the downloaded ZIP. Setup prepares private Node.js, Python and Pillow, and an SSH client if missing. Windows x64 is required; Windows ARM64 and 32-bit systems are not supported. The default installer and panel launch have been tested in Windows 11 x64. The panel and console packages are included; the Linux PC media hosts are not Windows-supported features.
+The desktop and Start-menu shortcuts include the IZ2S icon and open the panel without a console window. For an existing installation, use those shortcuts or Start.vbs in the installed folder. Start.cmd is retained as a console diagnostic entry point; do not start files from the downloaded ZIP. Setup prepares private Node.js, Python and Pillow, and an SSH client if missing. Windows x64 is required; Windows ARM64 and 32-bit systems are not supported. The panel and console packages are included; the Linux PC media hosts are not Windows-supported features.
 
 Windows may show its standard firewall permission dialog for Node.js. Allow access on your private network when connecting a console; the local panel itself works without opening incoming network access.
 
@@ -125,7 +141,7 @@ SD:/iz2s/modules/iz2s-cheese/launcher.iza
 
 A PC download may be a package containing resources; do not simply rename that package to `launcher.iza`.
 
-BlitBun uses its panel tab to select a browser share or a PC window. Native window/audio capture uses Linux, FFmpeg, X11/XWayland and PulseAudio/PipeWire (`pactl`/`parec`). Browser sharing requires an explicit selection in the browser. VacooTube includes its PC application source, streaming server and, in the Linux archive, clean Electron runtimes for x64/ARM64. No browser profile or login is included. These Linux media helpers are not supported on Windows in this candidate; application files remain available for installation to Switch. Book Reader imports TXT/EPUB through its panel settings. IZ2S Cheese uses a configured catalog and its own download interface.
+BlitBun uses its panel tab to select a browser share or a PC window. Native window/audio capture uses Linux, FFmpeg, X11/XWayland and PulseAudio/PipeWire (`pactl`/`parec`). Browser sharing requires an explicit selection in the browser. VacooTube includes its PC application source, streaming server and, in the Linux archive, clean Electron runtimes for x64/ARM64. No browser profile or login is included. These Linux media helpers are not supported on Windows; application files remain available for installation to Switch. Book Reader imports TXT/EPUB through its panel settings. IZ2S Cheese uses a configured catalog and its own download interface.
 
 ## IZPSX BIOS and games
 

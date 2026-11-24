@@ -83,8 +83,7 @@ include source/image hashes. Preserve the library notices in NOTICE.txt.
 The ARM input workflow remains separate and compatible with input API 1.
 
 Windows/macOS installers and manual SD copying require real OS testing. Native
-session declarations currently remain Linux-only. Read README-RUN24.txt and
-README-RUN24.txt in the platform root. A physical Linux x64 / ADV / IZPSlauncher path has
+session declarations currently remain Linux-only. Read README.md in the project root. A physical Linux x64 / ADV / IZPSlauncher path has
 reached the running launcher; this does not qualify every host/device/module.
 
 Device documentation: https://docs.m5stack.com/en/core/Cardputer-Adv

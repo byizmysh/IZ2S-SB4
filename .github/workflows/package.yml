@@ -1,4 +1,4 @@
-name: Verify IZ2S SB4 0.25
+name: Verify IZ2S SB4
 on:
   push:
     branches: [main]

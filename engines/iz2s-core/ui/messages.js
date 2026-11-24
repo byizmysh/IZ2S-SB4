@@ -37,7 +37,7 @@ slot|Program slot {n}|Слот программы {n}|Ranura de programa {n}|程
 slotLabel|Empty program slot|Пустой слот программы|Ranura de programa vacía|空程序槽
 setupReady|Direct is open, the selected slot is empty and the keyboard is set to English (US).|Открыт Direct, выбранный слот пуст, клавиатура настроена на English (US).|Direct está abierto, la ranura seleccionada está vacía y el teclado está en inglés (EE. UU.).|已打开 Direct，所选程序槽为空，键盘已设为英语（美国）。
 enterSource|Enter 229 lines|Ввести 229 строк|Introducir 229 líneas|输入 229 行
-reviewed|All 229 lines are in the editor. The last line is END.|В редакторе есть все 229 строк. Последняя строка — END.|El editor contiene las 229 líneas. La última es END.|编辑器中已有全部 229 行，最后一行为 END。
+reviewed|All 229 lines are in the editor. The last line is END.|В редакторе есть все 229 строк. Последняя строка - END.|El editor contiene las 229 líneas. La última es END.|编辑器中已有全部 229 行，最后一行为 END。
 verify|Check the source|Проверить исходник|Verificar el código|校验源代码
 save|Save NS2IZA|Сохранить NS2IZA|Guardar NS2IZA|保存 NS2IZA
 optional|Checking is optional. Confirm the save or overwrite on Switch.|Проверка необязательна. Подтвердите сохранение или замену файла на Switch.|La verificación es opcional. Confirma el guardado o la sustitución en Switch.|校验为可选操作。请在 Switch 上确认保存或覆盖。
@@ -97,7 +97,7 @@ apps|Apps|Приложения|Aplicaciones|应用
 appsHint|Choose a tile on Switch. Use ZR to change SD pages.|Выберите плитку на Switch. Кнопка ZR переключает страницы SD.|Elige una tarjeta en Switch. Pulsa ZR para cambiar de página en la SD.|在 Switch 上选择卡片。按 ZR 切换 SD 页面。
 ps2Hint|Open IZPS2, then select a BIOS and a game on the SD card.|Откройте IZPS2 и выберите BIOS и игру на SD-карте.|Abre IZPS2 y elige una BIOS y un juego de la tarjeta SD.|打开 IZPS2，然后选择 SD 卡上的 BIOS 和游戏。
 return|Return|Возврат|Volver|返回
-returnHint|Press the right stick twice to exit IZA. Press + to leave the menu.|Из IZA выйдите двумя короткими нажатиями правого стика, из меню — кнопкой «+».|Pulsa dos veces el stick derecho para salir de IZA. Pulsa + para salir del menú.|按两次右摇杆退出 IZA。按 + 退出菜单。
+returnHint|Press the right stick twice to exit IZA. Press + to leave the menu.|Из IZA выйдите двумя короткими нажатиями правого стика, из меню - кнопкой «+».|Pulsa dos veces el stick derecho para salir de IZA. Pulsa + para salir del menú.|按两次右摇杆退出 IZA。按 + 退出菜单。
 newLaunch|New launch|Новая попытка|Nuevo intento|新建尝试
 finishSmile|Close SmileBASIC to finish this session.|Закройте SmileBASIC, чтобы завершить сеанс.|Cierra SmileBASIC para terminar esta sesión.|关闭 SmileBASIC 以结束此会话。
 offlineMenu|The console menu runs independently of the PC panel.|Меню на консоли работает без панели на ПК.|El menú de la consola funciona sin el panel del PC.|主机菜单可独立于电脑面板运行。

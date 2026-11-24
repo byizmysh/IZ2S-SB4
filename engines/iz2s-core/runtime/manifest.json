@@ -8,8 +8,8 @@
     },
     {
       "path": "installer/README.md",
-      "bytes": 10443,
-      "sha256": "1effc97a26d679cf2772a3c620f0805eaae6e83c3bd145283db62333672e3f1b"
+      "bytes": 10436,
+      "sha256": "dceacaa80a4a20082f2929429653601568b6f9c818f4895d62fc1bd9426f8505"
     },
     {
       "path": "installer/bootstrap.bas",
