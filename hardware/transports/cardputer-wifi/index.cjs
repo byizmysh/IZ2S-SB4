@@ -69,8 +69,8 @@ function create({root,configuration,preparePlan=value=>require('../common.cjs').
   if(Object.keys(plans).length>16||Buffer.byteLength(JSON.stringify(plans))>65536)throw Error('Cardputer input package exceeds 64 KiB');
    const contentId=hash(plans),device=await status();
    if(Object.values(plans).some(plan=>plan.steps.some(step=>step.type==='gamepad'))&&!device.gamepadInput)throw Error('Install dual HID Cardputer ADV firmware 0.22.2 before automatic controller input');
-   if(Object.values(plans).some(plan=>plan.sourceMode==='raw-lines')&&!device.sourceLineSelection)throw Error('Install unified Cardputer ADV firmware 0.22.1 or newer from Device setup before using CivSwitch');
-   if(Object.values(plans).some(plan=>plan.steps.some(step=>step.type==='text'))&&!device.rawTextInput)throw Error('Install Cardputer ADV firmware 0.22.0 or newer from Device setup before using CivSwitch');
+   if(Object.values(plans).some(plan=>plan.sourceMode==='raw-lines')&&!device.sourceLineSelection)throw Error('Install unified Cardputer ADV firmware 0.22.1 or newer from Device setup before using raw text input');
+   if(Object.values(plans).some(plan=>plan.steps.some(step=>step.type==='text'))&&!device.rawTextInput)throw Error('Install Cardputer ADV firmware 0.22.0 or newer from Device setup before using raw text input');
   if(device.contentId!==contentId){
    if(device.busy)throw Error('Stop Cardputer input before replacing its text package');
    onEvent({detail:'Loading all input text into Cardputer ADV'});

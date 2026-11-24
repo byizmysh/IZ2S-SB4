@@ -222,5 +222,12 @@
     "sourceSha256": "285b468bcd34967544dd16936b1fd28f28c5dc126b4ce3acd352c66ea1b874b9",
     "bytes": 821884,
     "sha256": "c87b672e0f74bf1c88362bc933d6743213a7f05bd5d04dec6f229f9ea48c4772"
+  },
+  {
+    "id": "iz2s-cheese",
+    "version": "0.8.7",
+    "sourceSha256": "e81310a198d5f658548ba6a42c972bfa8eff15e84af4fdb34e32fa63b85548d3",
+    "bytes": 907512,
+    "sha256": "cc4bb45228d8218831810885927f736eab30d7705f6076b969907565a261aef7"
   }
 ]

@@ -5,8 +5,8 @@
 // deliberately not persisted. Legacy global choices never become selections.
 (function(root){
  function scope(state){
-  const civ=['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId);
-  return (civ?'civ7':'sb4')+':'+(civ?state?.civLauncher?.shell||'izlauncher':state?.platform?.variant||'original');
+
+  return (('sb4'))+':'+((state?.platform?.variant||'original'));
  }
  function create(preferences){
   const selected=new Set();let current=null;
@@ -57,7 +57,6 @@
   const detail=canonical(value),s=(String(value?.message??value??'')+' '+detail).toLowerCase();let title,action;
   if(/fs rpc memory acquisition failed|fs acquisition stopped|overwrite missed.*canary/.test(s)){title='Filesystem access was not acquired in this attempt.';action='Fully close and reopen the game, open a fresh Direct, then start a new session.';}
   else if(/resources retained|uncertain|did not (?:finish|terminate)|restart required|native execution/.test(s)){title='Native execution could not be confirmed.';action='Restart the game before starting a new session.';}
-  else if(/9026|loader.*not (?:respond|found)|awaiting payload/.test(s)){title='The game loader is not responding.';action='Open Load Game on Switch, wait for Awaiting payload, then check the connection.';}
   else if(/dbi (?:copy failed|mtp responder)|switch 1 copy verification failed/.test(s)){title='Could not install IZ2S SB4 Keyboard.';action='Open DBI MTP Responder on Switch 1 and try again, or download the SD package.';}
   else if(/reopen.*(?:application|launch link)|this window link is no longer valid/.test(s)){title='This window link is no longer valid.';action='Open 0.25 from its shortcut.';}
   else if(s.includes('iz2s file manager is unavailable')){title='IZ2S file manager is unavailable.';action='Open IZ2S on Switch and connect its PC link, then try again.';}
@@ -78,16 +77,16 @@
 'use strict';
 (function(root){
  function session(state){
-  const civ=state?.civLauncher,active=state?.active;
-  const running=active?.status==='running'||civ?.state==='running';
-  const retained=!!active||['running','offline','starting','stopping'].includes(civ?.state);
-  const offline=civ?.state==='offline'||active?.status==='offline'||!!state?.offline||retained&&!!state?.link&&['waiting-for-dock','waiting-for-network','offline'].includes(state.link.state);
-  const stopping=active?.status==='stopping'||civ?.state==='stopping';
-  const unconfirmed=stopping&&(active?.nativeParentRetention?.awaitingActualClose||civ?.shutdownUnconfirmed);
-  return {running,offline,stopping,unconfirmed:!!unconfirmed,compact:running||offline||stopping&&active?.kind!=='bootstrap',title:unconfirmed?'Shutdown unconfirmed':stopping?'Disconnecting\u2026':offline?'Connection interrupted':running?'Session is running':'Connection',game:['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId)?'Civilization VII':'SmileBASIC 4',launcher:(civ?.shell||state?.platform?.variant)==='izpslauncher'?'IZPSlauncher':(civ?.shell||state?.platform?.variant)==='original'?'Core only':'IZ2S'};
+  const active=state?.active;
+  const running=active?.status==='running'||false;
+  const retained=!!active||false;
+  const offline=(active?.status==='offline')||!!state?.offline||retained&&!!state?.link&&['waiting-for-dock','waiting-for-network','offline'].includes(state.link.state);
+  const stopping=active?.status==='stopping'||false;
+  const unconfirmed=stopping&&(active?.nativeParentRetention?.awaitingActualClose||undefined);
+  return {running,offline,stopping,unconfirmed:!!unconfirmed,compact:running||offline||stopping&&active?.kind!=='bootstrap',title:unconfirmed?'Shutdown unconfirmed':stopping?'Disconnecting\u2026':offline?'Connection interrupted':running?'Session is running':'Connection',game:('SmileBASIC 4'),launcher:((state?.platform?.variant))==='izpslauncher'?'IZPSlauncher':((state?.platform?.variant))==='original'?'Core only':'IZ2S'};
  }
  function directNetwork(state){
-  if(!state?.platform||['civswitch','civswitch-ldn'].includes(state.platform.loaderId)||state.active?.kind==='bootstrap')return false;
+  if(!state?.platform||false||state.active?.kind==='bootstrap')return false;
   const initializing=state.active?.kind==='launch'&&state.active.launchStage==='initializing';
   return !!state.connected||initializing||session(state).compact||connectionMode(state).available;
  }
@@ -136,7 +135,7 @@
  }
  function library(state){
   const packages=[...(state.library||[])],known=new Set(packages.map(p=>p.id));
-  if(['civswitch','civswitch-ldn'].includes(state.platform?.loaderId))return packages;
+  ;
   for(const entry of [...(state.sdInstalled||[]),...(state.platform?.sdLauncher?state.installed||[]:[])]){
    const row=typeof entry==='string'?{id:entry}:entry;if(!row?.id||known.has(row.id))continue;known.add(row.id);
    packages.push({...row,name:row.name||row.id,version:row.versionVerified?row.version:null,bytes:row.bytes||0,icon:row.id==='iz-reconnect'?'/reconnect.svg':row.icon||'/icon.svg',description:'Installed on SD. The PC package is not available.',supported:false,sdOnly:true,sd:{compatible:true}});
@@ -146,9 +145,9 @@
  // Console inventory only: never infer RAM presence from PC files or startup choices.
  function consoleApps(state){
   if(!state?.connected)return [];
-  const civ=['civswitch','civswitch-ldn'].includes(state.platform?.loaderId),sdMode=!!state.platform?.sdLauncher;
+  const sdMode=!!state.platform?.sdLauncher;
   const ram=new Set((sdMode?[]:state.installed||[]).map(row=>typeof row==='string'?row:row.id));
-  const sd=new Set((civ?[]:[...(state.sdInstalled||[]),...(sdMode?state.installed||[]:[])]).map(row=>typeof row==='string'?row:row.id));
+  const sd=new Set((([...(state.sdInstalled||[]),...(sdMode?state.installed||[]:[])])).map(row=>typeof row==='string'?row:row.id));
   const packages=library(state),known=new Set(packages.map(p=>p.id));
   for(const entry of state.installed||[]){const row=typeof entry==='string'?{id:entry}:entry;if(row?.id&&!known.has(row.id)){packages.push({id:row.id,name:row.name||row.id,icon:row.id==='iz-reconnect'?'/reconnect.svg':row.icon||'/icon.svg'});known.add(row.id);}}
   return packages.filter(p=>ram.has(p.id)||sd.has(p.id)).map(p=>({id:p.id,name:p.name,icon:p.icon||'/icon.svg',ram:ram.has(p.id),sd:sd.has(p.id)}));
@@ -208,7 +207,7 @@
 // Convert the existing archive download when a running older panel server
 // cannot yet serve the standalone installer. No server restart is required.
 (function(root){
- const template="#!/usr/bin/env python3\n\"\"\"IZ2S ARM installer: USB keyboard + controller for Civ7 and SmileBASIC 4.\"\"\"\nimport argparse\nimport base64\nimport hashlib\nimport importlib.util\nimport io\nimport json\nimport os\nfrom pathlib import Path\nimport sys\nimport tarfile\nimport tempfile\n\nARCHIVE_SHA256 = '__IZ2S_SHA256__'\nARCHIVE_BASE64 = '__IZ2S_PAYLOAD__'\n\n\ndef payload():\n    archive = base64.b64decode(ARCHIVE_BASE64, validate=True)\n    if hashlib.sha256(archive).hexdigest() != ARCHIVE_SHA256:\n        raise ValueError('Installer archive checksum mismatch. Download it again.')\n    files = {}\n    with tarfile.open(fileobj=io.BytesIO(archive), mode='r:gz') as bundle:\n        for member in bundle.getmembers():\n            parts = member.name.split('/')\n            if len(parts) != 2 or parts[0] != 'arm-input' or not member.isfile() or not member.size <= 2 * 1024 * 1024:\n                raise ValueError('Invalid installer entry')\n            name = parts[1]\n            if not name or name in ('.', '..') or '\\\\' in name or name in files:\n                raise ValueError('Invalid installer entry name')\n            files[name] = bundle.extractfile(member).read()\n    sums = json.loads(files['checksums.json'])\n    expected = sums['files']\n    if sums['algorithm'] != 'sha256' or set(files) != set(expected) | {'checksums.json'}:\n        raise ValueError('Installer file inventory mismatch')\n    for name, digest in expected.items():\n        if hashlib.sha256(files[name]).hexdigest() != digest:\n            raise ValueError('Installer checksum mismatch: ' + name)\n    package = json.loads(files['package.json'])\n    if package['id'] != 'arm-input' or not {'usb-keyboard', 'usb-gamepad', 'automatic-chat'} <= set(package['capabilities']):\n        raise ValueError('This installer requires the keyboard + controller package')\n    return files, package\n\n\ndef check_host():\n    if not sys.platform.startswith('linux'):\n        raise RuntimeError('Run this installer on the ARM Linux input device.')\n    if not Path('/run/systemd/system').is_dir():\n        raise RuntimeError('A running systemd installation is required on ARM.')\n    controllers = list(Path('/sys/class/udc').glob('*'))\n    if len(controllers) != 1:\n        raise RuntimeError('One USB device/OTG controller is required. Enable the board USB device driver first.')\n    return controllers[0].name\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    mode = parser.add_mutually_exclusive_group()\n    mode.add_argument('--check-package', action='store_true', help='Verify the embedded package without changing this computer')\n    mode.add_argument('--check', action='store_true', help='Verify the package and ARM prerequisites without installing')\n    parser.add_argument('--folder', default='/opt/iz2s/arm-input')\n    parser.add_argument('--hid', default='/dev/hidg0')\n    args = parser.parse_args()\n    files, package = payload()\n    if args.check_package:\n        print(json.dumps({'verified': True, 'version': package['version'], 'capabilities': package['capabilities']}))\n        return\n    controller = check_host()\n    if args.check:\n        print(json.dumps({'verified': True, 'usbController': controller, 'version': package['version']}))\n        return\n    if os.geteuid() != 0:\n        raise RuntimeError('Use sudo python3 ' + Path(sys.argv[0]).name + ' on the ARM device.')\n    with tempfile.TemporaryDirectory(prefix='iz2s-arm-install-') as temporary:\n        folder = Path(temporary)\n        for name, data in files.items():\n            (folder / name).write_bytes(data)\n        spec = importlib.util.spec_from_file_location('iz2s_arm_install', folder / 'install.py')\n        installer = importlib.util.module_from_spec(spec)\n        spec.loader.exec_module(installer)\n        encoded = {name: base64.b64encode(data).decode() for name, data in files.items()}\n        result = installer.install(args.folder, encoded, args.hid, dual_hid=True)\n    print(json.dumps(result))\n\n\nif __name__ == '__main__':\n    try:\n        main()\n    except (Exception, KeyboardInterrupt) as error:\n        print('Installation stopped: ' + (str(error) or 'cancelled'), file=sys.stderr)\n        sys.exit(1)\n";
+ const template="#!/usr/bin/env python3\n\"\"\"IZ2S ARM installer: USB keyboard + controller for SmileBASIC 4.\"\"\"\nimport argparse\nimport base64\nimport hashlib\nimport importlib.util\nimport io\nimport json\nimport os\nfrom pathlib import Path\nimport sys\nimport tarfile\nimport tempfile\n\nARCHIVE_SHA256 = '__IZ2S_SHA256__'\nARCHIVE_BASE64 = '__IZ2S_PAYLOAD__'\n\n\ndef payload():\n    archive = base64.b64decode(ARCHIVE_BASE64, validate=True)\n    if hashlib.sha256(archive).hexdigest() != ARCHIVE_SHA256:\n        raise ValueError('Installer archive checksum mismatch. Download it again.')\n    files = {}\n    with tarfile.open(fileobj=io.BytesIO(archive), mode='r:gz') as bundle:\n        for member in bundle.getmembers():\n            parts = member.name.split('/')\n            if len(parts) != 2 or parts[0] != 'arm-input' or not member.isfile() or not member.size <= 2 * 1024 * 1024:\n                raise ValueError('Invalid installer entry')\n            name = parts[1]\n            if not name or name in ('.', '..') or '\\\\' in name or name in files:\n                raise ValueError('Invalid installer entry name')\n            files[name] = bundle.extractfile(member).read()\n    sums = json.loads(files['checksums.json'])\n    expected = sums['files']\n    if sums['algorithm'] != 'sha256' or set(files) != set(expected) | {'checksums.json'}:\n        raise ValueError('Installer file inventory mismatch')\n    for name, digest in expected.items():\n        if hashlib.sha256(files[name]).hexdigest() != digest:\n            raise ValueError('Installer checksum mismatch: ' + name)\n    package = json.loads(files['package.json'])\n    if package['id'] != 'arm-input' or not {'usb-keyboard', 'usb-gamepad', 'automatic-chat'} <= set(package['capabilities']):\n        raise ValueError('This installer requires the keyboard + controller package')\n    return files, package\n\n\ndef check_host():\n    if not sys.platform.startswith('linux'):\n        raise RuntimeError('Run this installer on the ARM Linux input device.')\n    if not Path('/run/systemd/system').is_dir():\n        raise RuntimeError('A running systemd installation is required on ARM.')\n    controllers = list(Path('/sys/class/udc').glob('*'))\n    if len(controllers) != 1:\n        raise RuntimeError('One USB device/OTG controller is required. Enable the board USB device driver first.')\n    return controllers[0].name\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    mode = parser.add_mutually_exclusive_group()\n    mode.add_argument('--check-package', action='store_true', help='Verify the embedded package without changing this computer')\n    mode.add_argument('--check', action='store_true', help='Verify the package and ARM prerequisites without installing')\n    parser.add_argument('--folder', default='/opt/iz2s/arm-input')\n    parser.add_argument('--hid', default='/dev/hidg0')\n    args = parser.parse_args()\n    files, package = payload()\n    if args.check_package:\n        print(json.dumps({'verified': True, 'version': package['version'], 'capabilities': package['capabilities']}))\n        return\n    controller = check_host()\n    if args.check:\n        print(json.dumps({'verified': True, 'usbController': controller, 'version': package['version']}))\n        return\n    if os.geteuid() != 0:\n        raise RuntimeError('Use sudo python3 ' + Path(sys.argv[0]).name + ' on the ARM device.')\n    with tempfile.TemporaryDirectory(prefix='iz2s-arm-install-') as temporary:\n        folder = Path(temporary)\n        for name, data in files.items():\n            (folder / name).write_bytes(data)\n        spec = importlib.util.spec_from_file_location('iz2s_arm_install', folder / 'install.py')\n        installer = importlib.util.module_from_spec(spec)\n        spec.loader.exec_module(installer)\n        encoded = {name: base64.b64encode(data).decode() for name, data in files.items()}\n        result = installer.install(args.folder, encoded, args.hid, dual_hid=True)\n    print(json.dumps(result))\n\n\nif __name__ == '__main__':\n    try:\n        main()\n    except (Exception, KeyboardInterrupt) as error:\n        print('Installation stopped: ' + (str(error) or 'cancelled'), file=sys.stderr)\n        sys.exit(1)\n";
  async function create(archive){
   const bytes=new Uint8Array(archive);
   if(bytes.length<32||bytes.length>4*1024*1024||bytes[0]!==31||bytes[1]!==139||bytes[2]!==8)throw Error('Invalid ARM input archive');
@@ -224,7 +223,7 @@
 // Shared destination policy and controls for the library and module tabs.
 // Rendering reads the existing snapshot only; it never polls the console.
 (function(root){
- const civ=state=>['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId);
+
  const targets=['session','sd'],label={session:'Session memory',sd:'SD card'},idOf=row=>typeof row==='string'?row:row?.id;
  function forStore(state){
   if(!state?.coreSd?.selected)return state;
@@ -236,11 +235,11 @@
  function installed(state,id){return {session:!state?.platform?.sdLauncher&&(state?.installed||[]).some(row=>idOf(row)===id),sd:[...(state?.sdInstalled||[]),...(state?.platform?.sdLauncher?state?.installed||[]:[])].some(row=>idOf(row)===id)};}
  function compatible(state,pkg,target){
   if(target==='session')return !state?.platform?.sdLauncher&&pkg?.session?.compatible!==false;
-  return target==='sd'&&!civ(state)&&pkg?.supported!==false;
+  return target==='sd'&&true&&pkg?.supported!==false;
  }
  function destination(state,pkg,preferences){
   if(pkg?.sdOnly)return 'sd';
-  if(civ(state))return 'session';
+  ;
   if(state?.platform?.sdLauncher)return 'sd';
   const chosen=preferences.get(pkg.id);if(targets.includes(chosen))return chosen;
   return pkg?.session?.compatible===false?'sd':'session';
@@ -248,11 +247,11 @@
  function reason(state,pkg,target,{remove=false}={}){
   if(!targets.includes(target))return 'Choose an installation destination';
   if(state?.preview)return 'Preview · device commands disabled';
-  if(civ(state)&&target==='sd')return 'Civilization VII currently loads applications into session memory.';
-  if(!remove&&civ(state)&&pkg?.session?.compatible===false)return pkg.session.reason||'Unavailable for this game';
+  ;
+  ;
   if(state?.coreSd?.selected&&!state.coreSd.ready)return 'Reconnect the IZ2S SD card to this PC or refresh its inventory.';
   if(state?.coreSd?.selected&&!remove&&pkg?.coreSd?.compatible!==true)return pkg?.coreSd?.reason||'This module needs a standalone IZ2S package.';
-  if(!state?.coreSd?.selected&&!civ(state)&&state?.platform?.variant==='original')return 'Choose a launcher in Connection to load applications.';
+  if(!state?.coreSd?.selected&&true&&state?.platform?.variant==='original')return 'Choose a launcher in Connection to load applications.';
   if(!state?.connected)return 'Connect Switch 2 and start the launcher first';
   if(!remove&&pkg?.supported===false)return 'This module is unavailable for this launcher';
   if(target==='session'){
@@ -299,7 +298,7 @@
   }
   function update(box,pkg){
    if(!box)return;const state=getState(),target=destination(state,pkg,preferences),select=box.querySelector('.storage-target'),error=reason(state,pkg,target),present=installed(state,pkg.id),busy=getBusy();
-   select.value=target;select.disabled=busy||pkg.sdOnly===true;for(const option of select.children){option.disabled=!compatible(state,pkg,option.value);option.hidden=civ(state)&&option.value==='sd';}
+   select.value=target;select.disabled=busy||pkg.sdOnly===true;for(const option of select.children){option.disabled=!compatible(state,pkg,option.value);option.hidden=(false);}
    const warning=filesystemWarning(state,pkg,target);
    const note=pkg.sdOnly?'Installed on SD. The PC package is not available.':error||(warning?'RAM storage only. Enable FS in a new session to run.':null)||(target==='sd'?(pkg?.sd?.compatible&&!pkg.sd.hostRequired?'Runs from SD without the PC.':'Requires the PC server when launched.'):'Cleared when the game closes.');text(box.querySelector('.storage-hint'),note);box.querySelector('.storage-hint').title=warning||note;box.querySelector('.storage-hint').dataset.tone=warning&&!error?'warning':'';
    const badge=box.querySelector('.storage-installed');badge.hidden=!present.session&&!present.sd;box.querySelector('.storage-badge-session').hidden=!present.session;box.querySelector('.storage-badge-sd').hidden=!present.sd;
@@ -614,7 +613,7 @@ function updateNavigation() {
     else button.removeAttribute('aria-current');
   }
   setText($('view-title'), title);
-  document.title = $('view-title').textContent + ' · IZ2S Platform';
+  document.title = $('view-title').textContent + ' · IZ2S SB4';
 }
 function storeNavigation(method) {
   const url = new URL(location.href);
@@ -658,16 +657,9 @@ let startupStamp = '';
 let inputDesign = 'arm', manualDesignStage = 1;
 const advSetup = globalThis.IZ2S_ADV_SETUP.create({document, changed:()=>{if(state)renderControls();},
   confirmUsb:()=>act('/api/cardputer/confirm-usb',{}),refreshUsb:()=>act('/api/check',{})});
-const civStartup=()=>startupChoices.payload($('preload-enabled').checked);
-const civswitchLdnUI = globalThis.IZ2S_CIVSWITCH_LDN.create({document,act,getStartup:civStartup,isUnavailable:()=>serverUnavailable});
-const civswitchUI = globalThis.IZ2S_CIVSWITCH.create({document, act,getStartup:civStartup,isUnavailable:()=>serverUnavailable,downloadArm:()=>downloadArmInstaller('civ7'),setupInput:event=>{
-  const adapter = state?.platform?.configuration?.inputAdapter;
-  if (adapter === 'switch-wifi') {
-    const picker = document.querySelector('#device-arm .device-picker');
-    if (picker) {event?.stopPropagation();closeTransientMenus(picker);picker.open = true;picker.querySelector('summary').focus();return;}
-  }
-  openDeviceSettings(adapter === 'cardputer-wifi' ? {tab:1} : {});
-}});
+
+
+
 let workspaceReady = false;
 let installPreferences;try{installPreferences=localStorage;}catch{}
 const storageState=()=>{
@@ -936,7 +928,7 @@ let sessionModeChoice=null,sessionModeScope='';
 function renderSessionConnectionMode(){
  const view=globalThis.IZ2S_PRESENTATION.connectionMode(state),scope=state?.active?.id||'idle';
  if(scope!==sessionModeScope){sessionModeScope=scope;sessionModeChoice=null;}
- const mode=sessionModeChoice||view.preferred,visible=step==='launch'&&state?.platform?.izModules===true&&!['civswitch','civswitch-ldn'].includes(state.platform.loaderId);
+ const mode=sessionModeChoice||view.preferred,visible=step==='launch'&&state?.platform?.izModules===true&&true;
  $('session-mode').hidden=!visible;
  for(const value of ['new','restore']){const button=$('session-mode-'+value);button.classList.toggle('selected',mode===value);button.setAttribute('aria-pressed',String(mode===value));button.disabled=busy||serverUnavailable||value==='new'&&view.retained||value==='restore'&&!view.available;}
  $('session-mode-note').textContent=mode==='restore'||view.retained?view.note:'After a full console restart, open SmileBASIC 4 → Make a Program → Direct, then start a new launcher session. Recovery reconnects to the same running launcher.';
@@ -980,11 +972,11 @@ function renderControls() {
   if (state && !state.recoverySetupAvailable)
     $('recovery-enabled').checked = false;
   $('launch-app-library').hidden = step !== 'launch' && !reboot;
-  const civMode=['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId);
-  if(!civMode&&$('launch-modules').parentElement!==$('iz-flow'))$('iz-flow').insertBefore($('launch-modules'),document.querySelector('#iz-flow .launch-row'));
-  $('launch-modules').hidden = civMode?$('launch-modules').hidden:state?.platform?.sdLauncher===true || (step !== 'launch' && !reboot);
+
+  if(($('launch-modules').parentElement!==$('iz-flow')))$('iz-flow').insertBefore($('launch-modules'),document.querySelector('#iz-flow .launch-row'));
+  $('launch-modules').hidden = (state?.platform?.sdLauncher===true || (step !== 'launch' && !reboot));
   $('preload-options').hidden = !$('preload-enabled').checked;
-  const preloadLocked = busy || serverUnavailable || !initial || (civMode && !!(state.platform.loaderId === 'civswitch-ldn' ? state.civswitchLdn?.busy : state.civswitch?.busy));
+  const preloadLocked = busy || serverUnavailable || !initial || ((false));
   $('preload-enabled').disabled = preloadLocked;
   $('preload-clear').disabled = preloadLocked;
   document
@@ -1513,7 +1505,7 @@ function renderArmSetup(meta) {
   const panel = $('arm-setup');
   panel.hidden = meta.configuration.inputAdapter !== 'ssh-gadget';
   if (panel.hidden) return;
-  $('arm-manual-command').textContent='sudo python3 '+(meta.loaderId==='civswitch'?'iz2s-civ7-arm-input.run':'iz2s-arm-input.run');
+  $('arm-manual-command').textContent='sudo python3 '+(('iz2s-arm-input.run'));
   const source = meta.profiles?.[meta.configurationId] || {};
   const fields = { 'arm-setup-address': source.armAddress || meta.configuration.settings?.armAddress || '', 'arm-setup-user': source.armUser || 'root', 'arm-setup-key': source.sshIdentity || '' };
   if(panel.dataset.configuration!==meta.configurationId){panel.dataset.configuration=meta.configurationId;panel.open=!state.checks.items.find(x=>x.id==='arm')?.ready;}
@@ -1548,10 +1540,10 @@ function renderDeviceDetail(container, row) {
   const extended = detail.length > 70 || detail.includes('\n');
   const first = detail.split(/\.(?:\s|$)|\n/)[0];
   const connectionLost=row.id==='lan'&&globalThis.IZ2S_PRESENTATION.session(state).offline;
-  const civPending=row.id==='lan'&&row.pending&&['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId)&&!state.connected;
-  setText(container.querySelector('.detail-text'), row.coreLabel ? detail : connectionLost?'Connection lost. Restore the connection to manage applications.':civPending?(state.platform.loaderId==='civswitch-ldn'?'Waiting for the game loader after LDN delivery.':'Wireless lobby may pause LAN. The loader is checked after input.'):row.id === 'lan' && state?.connected ? 'Console connected' : row.id === 'lan' && row.pending ? (state?.active?.launchStage === 'initializing' && state?.link?.state === 'connected' ? 'Console connected · preparing launcher' : state?.active ? 'Waiting for a Switch session.' : state?.checks?.ready === false ? 'Console network ready.' : 'Start the launcher below to connect Switch.') : extended
+
+  setText(container.querySelector('.detail-text'), row.coreLabel ? detail : connectionLost?'Connection lost. Restore the connection to manage applications.':(row.id === 'lan' && state?.connected ? 'Console connected' : row.id === 'lan' && row.pending ? (state?.active?.launchStage === 'initializing' && state?.link?.state === 'connected' ? 'Console connected · preparing launcher' : state?.active ? 'Waiting for a Switch session.' : state?.checks?.ready === false ? 'Console network ready.' : 'Start the launcher below to connect Switch.') : extended
     ? (first.length <= 55 ? first.replace(/[.;]$/, '') + '.' : row.pending ? 'Waiting for connection.' : row.ready ? 'Ready.' : 'Setup required.')
-    : detail);
+    : detail));
   container.querySelector('.detail-help').hidden = !extended;
   setText(container.querySelector('.detail-tooltip'), detail);
 }
@@ -1586,7 +1578,7 @@ function renderDevicePicker(card, row) {
     inputName = inputDesign === 'own' ? 'Your input device' : meta.configuration.inputAdapter === 'ssh-gadget' ? 'ARM PC' : meta.configuration.hardware?.input?.name || 'ARM PC',
     canChange = !state.active && !busy && !serverUnavailable && !meta.locked,
     choices = [
-      {id:'switch1', name:'Switch 1', note:'Wi-Fi → USB keyboard · SB4', available:canChange&&!['civswitch','civswitch-ldn'].includes(meta.loaderId)},
+      {id:'switch1', name:'Switch 1', note:'Wi-Fi → USB keyboard · SB4', available:canChange&&true},
       {id:'arm', name:'ARM PC', note:'USB keyboard input', available:canChange},
       {id:'cardputer', name:'Cardputer ADV', note:'Wi-Fi → USB keyboard', available:canChange},
       ...(state.preview && meta.izModules ? [{id:'own', name:'Manual input · preview', note:'Interface demonstration only', available:canChange}] : []),
@@ -1649,7 +1641,7 @@ function renderManualInputDesign() {
   $('manual-input-design').hidden = !shown;
   if (shown) $('iz-flow').hidden = true;
   else if (wasShown) {
-    $('iz-flow').hidden = !meta.izModules||['civswitch','civswitch-ldn'].includes(meta.loaderId);
+    $('iz-flow').hidden = !meta.izModules||false;
     renderEngineInstall();
   }
   const arm = $('device-arm');
@@ -1668,7 +1660,7 @@ function renderManualInputDesign() {
     const row = state.checks.items.find(item => item.id === 'arm');
     if (row) renderDevicePicker(arm, row);
   }
-  $('hardware-options').hidden = shown || meta.loaderId==='civswitch-ldn';
+  $('hardware-options').hidden = shown || false;
   if (!shown) return;
   $('arm-setup').hidden = true;
   $('cardputer-setup').hidden = true;
@@ -1725,8 +1717,8 @@ $('manual-next').onclick = () => {
 };
 $('manual-exit').onclick = () => { inputDesign = 'arm'; renderDevices(); renderControls(); };
 function retainDeviceControls(rows=state.checks.items){
-  for(const card of $('devices').children||[]){card.classList.remove('civ-run-console');card.classList.remove('awaiting-loader');}
-  for(const prefix of ['civ','ldn']){const endpoint=$(prefix+'-run-endpoint'),home=$(prefix+'-run-connection'),selected=state.platform?.loaderId==='civswitch-ldn'?'ldn':state.platform?.loaderId==='civswitch'?'civ':'';if(endpoint&&home&&$('devices').contains(endpoint)&&(prefix!==selected||!state.checks.items.some(row=>row.id==='lan')))home.append(endpoint);}
+  for(const card of $('devices').children||[]){;card.classList.remove('awaiting-loader');}
+  ;
   const confirmation=$('adv-usb-next'),devices=$('devices');
   // This shared control lives in the USB tile while it exists. Keep it alive
   // when changing to a game that has no USB tile.
@@ -1767,12 +1759,10 @@ function renderDeviceTopology(){
 }
 function renderDevices() {
   const core = coreView.current();
-  const rows = (state.platform?.loaderId === 'civswitch-ldn'
-    ? state.checks.items.filter(row => ['server', 'lan', 'ldn'].includes(row.id))
-    : state.checks.items).map(row => globalThis.IZ2S_CORE.deviceRow(row, core));
+  const rows = ((state.checks.items)).map(row => globalThis.IZ2S_CORE.deviceRow(row, core));
   retainDeviceControls(rows);
   const config = state.connections;
-  $('devices').classList.toggle('ldn-devices',state.platform?.loaderId==='civswitch-ldn');
+  ;
   for(const card of [...$('devices').children])if(!rows.some(row=>card.id==='device-'+row.id))card.remove();
   $('devices').style.setProperty('--device-count',rows.length);
   for (const [index, row] of rows.entries()) {
@@ -1954,17 +1944,9 @@ function renderDevices() {
       : '\u00a0');
     const transport=card.querySelector('.transport-choice');
     if(transport){
-      transport.hidden=row.id==='ldn';
-      for(const option of transport.children)option.hidden=option.classList.contains('ldn-transport');
+      transport.hidden=false;
     }
-    if(state.platform.loaderId==='civswitch-ldn'){
-      if(transport){
-        let badge=transport.querySelector('.ldn-transport');
-        if(!badge){badge=element('span','ldn-transport');badge.append(transport.querySelector('[data-transport="wifi"] svg').cloneNode(true),element('span','','Wi-Fi · LDN'));transport.append(badge);}
-        for(const option of transport.children)option.hidden=option!==badge;
-      }
-      const editor=card.querySelector('.address-editor');if(editor)editor.hidden=true;continue;
-    }
+    ;
     if (preference) {
       const locked = busy || !!config.locked || !!state.preview || !!core?.owned;
       const switchKeyboard=state.platform.configuration.inputAdapter==='switch-wifi';
@@ -2152,10 +2134,7 @@ function renderDevices() {
         .querySelectorAll('button')
         .forEach((button) => (button.disabled = locked));
     } else if (row.id !== 'usb') {
-      if(row.id==='ldn'){
-        card.querySelector('.transport-choice').hidden=true;
-        card.querySelector('.address-editor').hidden=true;
-      }
+      ;
       card
         .querySelectorAll('button,input,select')
         .forEach((e) => (e.disabled = true));
@@ -2213,7 +2192,7 @@ function residentEligibility(pkg) {
   return state?.platform?.residentFiniteAudio ? pkg?.residentAudio : pkg?.resident;
 }
 function selectedShellName() {
-  const id=['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId)?state.civLauncher?.shell||'izlauncher':state?.platform?.variant;
+  const id=(state?.platform?.variant);
   return id==='original'?'Core only':state?.platform?.shells?.find(shell=>shell.id===id)?.name||(id==='izpslauncher'?'IZPSlauncher':'IZ2S');
 }
 
@@ -2487,8 +2466,8 @@ function renderLibrary() {
   if(toggle){toggle.hidden=!!state.preview;toggle.setAttribute('aria-pressed',String(!!coreSd));}
   const packages=globalThis.IZ2S_PRESENTATION?.library?.(state)||state.library;
   renderIssueList('module-errors', state.moduleErrors);
-  const civ=['civswitch','civswitch-ldn'].includes(state.platform?.loaderId);
-  const available = new Set(packages.filter(pkg => pkg.supported !== false&&(!civ||pkg.session?.compatible!==false)).map(pkg => pkg.id));
+
+  const available = new Set(packages.filter(pkg => pkg.supported !== false&&((true))).map(pkg => pkg.id));
   for (const id of selection) if (!available.has(id)) selection.delete(id);
   const stamp = JSON.stringify(
     [state.platform?.sdLauncher,coreSd,state.coreLive,packages.map((p) => [p.id, p.version, p.bytes, p.name, p.icon, p.description, p.supported, p.contents, p.sd, p.session, p.format])],
@@ -2544,8 +2523,7 @@ function renderLibrary() {
       const installInfo = element('span', 'app-install-info');
       installInfo.append(element('span', 'app-install-status'), element('small', 'app-sd-version'));
       label.append(installInfo);
-      if(civ&&pkg.session?.compatible===false)label.append(element('small','app-requirement',pkg.session.reason||'Unavailable for this game'));
-      else if(pkg.session?.requiresFilesystem)label.append(element('small','app-requirement','Requires filesystem access'));
+      if(pkg.session?.requiresFilesystem)label.append(element('small','app-requirement','Requires filesystem access'));
       card.append(label, element('div', 'module-host-actions'));
       if(!coreSd&&state.platform?.sdLauncher&&(!pkg.sd?.compatible||pkg.sd?.hostRequired))card.append(element('p','hint','Stored on SD; uses the PC executor when launched.'));
       if (pkg.contents) {
@@ -2680,7 +2658,7 @@ function renderLibrary() {
     }
   }
   const sdRefresh=$('library-sd-refresh');
-  sdRefresh.hidden=civ||!(coreSd||state.platform?.sdLauncher||state.sdStorage?.enabled);
+  sdRefresh.hidden=(!(coreSd||state.platform?.sdLauncher||state.sdStorage?.enabled));
   const sdError=globalThis.IZ2S_STORAGE?.reason?.(state,{id:'sd-inventory'},'sd',{remove:true})||'';
   sdRefresh.disabled=busy||serverUnavailable||(state.coreLive?!state.connected:(!coreSd&&!!sdError));sdRefresh.title=state.coreLive?'':sdError;
   const installed = new Set([...(state.installed||[]),...(state.sdInstalled||[])].map(app => typeof app === 'string' ? app : app.id));
@@ -2782,7 +2760,7 @@ function renderLibrary() {
     ? 'Applications are installed in SD:/iz2s/modules/. The console discovers and opens them locally. Modules requiring PC services or a separate native entry are unavailable in this mode.'
     : state.platform?.residentGraphics && state.active
     ? 'Compatible apps remain in memory for this session. '+(state.residentMemory?'Session memory: '+(state.residentMemory.usedBytes/1048576).toFixed(1)+' / '+(state.residentMemory.budgetBytes/1048576).toFixed(0)+' MiB. ':'')+'Add apps from the menu while the PC is available. Select the full set before a retained-audio session.'
-    : state.platform?.variant==='original'&&!civ
+    : state.platform?.variant==='original'&&true
     ? 'Choose a launcher in Connection to load applications.'
     : state.connected
     ? 'Choose an installation destination on each card. Selected: ' + selection.size
@@ -2899,9 +2877,9 @@ function appendProblem(container,message){
 }
 const sessionActionHomes=new Map();
 function placeSessionActions(view){
- const civ=state.platform?.loaderId,selected=civ==='civswitch-ldn'?'ldn-stop':civ==='civswitch'?'civ-stop':'stop';
+ const selected=(('stop'));
  const target=$('session-summary-session-actions');
- for(const id of ['stop','restore-connection','civ-stop','ldn-stop']){
+ for(const id of ['stop','restore-connection']){
   const button=$(id);if(!button||!target)continue;
   const show=view.compact&&(id===selected||id==='restore-connection'&&selected==='stop');
   if(show){if(!sessionActionHomes.has(id))sessionActionHomes.set(id,{parent:button.parentElement,next:button.nextSibling});if(button.parentElement!==target)target.append(button);}
@@ -2920,8 +2898,8 @@ function renderSessionPresentation(){
  setup.classList.toggle('session-offline',view.offline||view.unconfirmed);
  setup.classList.toggle('session-configuration-open',configurationOpen);
  if(view.offline){$('mode').textContent='Connection interrupted';$('mode').dataset.state='offline';}
- const consoleCard=$('device-lan');if(view.offline&&consoleCard){consoleCard.classList.remove('ready','pending');consoleCard.classList.add('connection-lost');setText(consoleCard.querySelector('.state'),'CONNECTION LOST');setText(consoleCard.querySelector('.detail-text')||consoleCard.querySelector('.device-detail'),['civswitch','civswitch-ldn'].includes(state.platform?.loaderId)?'Connection lost. Stop this session, restart Civilization VII and open Load Game.':'Connection lost. Restore the connection to manage applications.');}
- if(consoleCard){consoleCard.classList.toggle('shutdown-unconfirmed',view.unconfirmed);if(view.unconfirmed){consoleCard.classList.remove('ready','pending','connection-lost');setText(consoleCard.querySelector('.state'),'Shutdown unconfirmed');setText(consoleCard.querySelector('.detail-text')||consoleCard.querySelector('.device-detail'),'Restart Civilization VII before starting a new session.');}}
+ const consoleCard=$('device-lan');if(view.offline&&consoleCard){consoleCard.classList.remove('ready','pending');consoleCard.classList.add('connection-lost');setText(consoleCard.querySelector('.state'),'CONNECTION LOST');setText(consoleCard.querySelector('.detail-text')||consoleCard.querySelector('.device-detail'),('Connection lost. Restore the connection to manage applications.'));}
+ if(consoleCard){consoleCard.classList.toggle('shutdown-unconfirmed',view.unconfirmed);if(view.unconfirmed){consoleCard.classList.remove('ready','pending','connection-lost');setText(consoleCard.querySelector('.state'),'Shutdown unconfirmed');setText(consoleCard.querySelector('.detail-text')||consoleCard.querySelector('.device-detail'),'Restart the console before starting a new session.');}}
  const summary=$('session-summary');
  if(summary.hidden!==!view.compact)summary.hidden=!view.compact;
  const connected=view.running&&(coreSession||state.connected);
@@ -2936,15 +2914,9 @@ function renderSessionPresentation(){
  let copy=view.offline?'Waiting for connection':state.fsRpc?.state==='ready'?'Filesystem access active':state.connected?'':'Connection pending';
  let note='The console session is retained. Restore the connection to manage applications.';
  let showNote=!view.stopping&&(view.offline||!state.connected);
- if(['civswitch','civswitch-ldn'].includes(state.platform?.loaderId)&&(view.offline||view.unconfirmed)){
-  showNote=true;
-  note=view.unconfirmed?'Restart Civilization VII before starting a new session.':'Connection lost. Stop this session, restart Civilization VII and open Load Game.';
- }
- const savedLoader=state.civswitchLdn?.saveInstallation||state.civswitch?.saveInstallation;
- if(view.running&&state.connected&&['civswitch','civswitch-ldn'].includes(state.platform?.loaderId)&&savedLoader?.state==='installed'){
-  showNote=true;
-  note='Save installed. Next time: Civilization VII → Load Game, then Launch in this panel.';
- }
+ ;
+
+ ;
  const coreActions=['core-add-app','core-restore','core-new-launch'].map($);
  if(coreSession){
   copy=connected?coreText('storeHint'):coreText('connectFromConsole');
@@ -2974,8 +2946,8 @@ function renderSessionPresentation(){
  setText($('session-settings-label'),configurationOpen?'Hide connection settings':'Connection settings');
  $('session-settings-toggle').setAttribute('aria-expanded',String(configurationOpen));
  if((view.running||view.offline)&&state.platform?.izModules)$('progress-note').textContent=state.connected?'Use App library to manage applications.':'The console session is retained. Restore the connection to manage applications.';
- for(const prefix of ['civ','ldn'])if(state.civLauncher?.state==='offline'){$(prefix+'-result-title').textContent='Connection interrupted';$(prefix+'-result-detail').textContent=globalThis.IZ2S_ERRORS.canonical(state.civLauncher.error||'The console session is retained.');$(prefix+'-result-detail').setAttribute('translate','no');}
- for(const prefix of ['civ','ldn'])if(state.civLauncher?.state==='running'){$(prefix+'-result-title').textContent='Launcher is running';$(prefix+'-result-detail').textContent=state.connected?'Console connected':'The console session is retained.';$(prefix+'-launch').hidden=true;}
+ ;
+ ;
  $('apps').classList.toggle('batch-selection',libraryBatch);$('library-batch').setAttribute('aria-pressed',String(libraryBatch));setText($('library-batch'),libraryBatch?'Finish selection':'Select multiple');
  document.querySelector('.library-bar').hidden=!libraryBatch;
  applyLibrarySearch();
@@ -3226,7 +3198,7 @@ function renderHistory() {
 
 function renderActivity() {
   const list = state.log.filter((e) => $('log-details').checked || e.type !== 'detail').slice(-250),
-    sessionActive = !!state.active || ['starting','running','offline','stopping'].includes(state.civLauncher?.state),
+    sessionActive = !!state.active || false,
     stamp = JSON.stringify([list, sessionActive]),
     log = $('log');
   $('download-session-log').disabled = !(state.active || state.lastAttempt)?.id;
@@ -3265,11 +3237,11 @@ function renderActivity() {
 
 function renderConnectionStatus() {
   const transferring=state?.active?.status==='running'&&!state?.offline&&(state.jobs||[]).some(j=>['loading','publishing'].includes(j.status))&&(!state.link||state.link.state==='connected');
-  const stopping = state?.active?.status === 'stopping'||state?.civLauncher?.state==='stopping';
-  const offline = state?.active?.status==='offline'||state?.civLauncher?.state==='offline';
-  const unconfirmed=stopping&&(state?.active?.nativeParentRetention?.awaitingActualClose||state?.civLauncher?.shutdownUnconfirmed);
-  const civNetwork=state?.platform?.loaderId==='civswitch'&&state?.civswitch?.networkReachable&&!state?.connected;
-  const civUsbWaiting=state?.platform?.loaderId==='civswitch'&&state?.civswitch?.wirelessNetworkPending&&state?.civswitch?.inputStatus?.keyboard;
+  const stopping = state?.active?.status === 'stopping'||false;
+  const offline = state?.active?.status==='offline'||false;
+  const unconfirmed=stopping&&(state?.active?.nativeParentRetention?.awaitingActualClose||undefined);
+
+
   const checks = state?.checks;
   const waitingForInput = checks?.items?.length && checks.items.every(row =>
     row.ready || row.pending || row.status === 'waiting' || row.status === 'setup');
@@ -3296,19 +3268,13 @@ function renderConnectionStatus() {
                 ? ['connected', 'Console connected']
                 : state?.active?.launchStage === 'initializing' && state?.link?.state === 'connected'
                   ? ['checking', 'Console connected · preparing launcher']
-                : civNetwork
-                  ? ['checking', 'Console on LAN · CivSwitch :9026 not verified']
-                : civUsbWaiting
-                  ? ['checking', 'CivSwitch · waiting for LAN; USB input available']
-                : state?.active
+                : ((state?.active
                   ? ['connecting', 'Connecting…']
-                : state?.platform?.loaderId==='civswitch-ldn'
-                  ? ['idle', 'Game loader not started']
-                  : checks?.ready
+                : (checks?.ready
                     ? ['idle', 'Session not started']
                     : waitingForInput
                       ? ['waiting', checks.setupRequired ? 'Device setup required' : inputReady ? 'Waiting for USB' : 'Waiting for input device']
-                      : ['disconnected', 'Not connected'];
+                      : ['disconnected', 'Not connected'])));
   const core = coreView.current();
   $('connection').setAttribute('translate', core ? 'no' : 'yes');
   if (core && !serverUnavailable && !state?.preview) connectionMode = globalThis.IZ2S_CORE.connectionState(core);
@@ -3334,7 +3300,7 @@ function renderServerAvailability() {
   renderLocalActionAvailability();
   $('panel-main').classList.toggle('server-unavailable', serverUnavailable);
   if (!serverUnavailable) return;
-  civswitchUI.render(state);civswitchLdnUI.render(state);
+  ;;
   if (state?.platform) renderArmSetup(state.platform);
   if (state) renderHistory();
   renderConnectionStatus();
@@ -3374,7 +3340,7 @@ function render() {
   }
   renderDevices();
   renderStartupModules();
-  civswitchUI.render(state);civswitchLdnUI.render(state);
+  ;;
   renderLibrary();
   renderConsoleApps();
   renderHistory();
@@ -3454,21 +3420,17 @@ function render() {
   renderSessionPresentation();
 }
 function renderMenuLayout() {
-  const id=state?.platform?.loaderId,civ=['civswitch','civswitch-ldn'].includes(id);
+  const id=state?.platform?.loaderId;
   $('devices').hidden=false;
   $('device-toolbar').hidden=false;
-  $('connection-files').hidden=civ;
-  $('mode').hidden=civ;
-  for(const [button,engine]of [['civ-mode-usb','civswitch'],['civ-mode-ldn','civswitch-ldn']]){
-    const needsRestart=engine==='civswitch-ldn'&&state.platform.civswitchLdnAvailable!==true;
-    $(button).disabled=serverUnavailable||busy||state.platform.locked||needsRestart;
-    $(button).title=needsRestart?(state.platform.locked||busy?'Restart the panel after ending the current session to enable CIV7 LAN.':'Restart the panel to enable CIV7 LAN.'):'';
-  }
+  $('connection-files').hidden=false;
+  $('mode').hidden=false;
+  ;
   document.querySelector('#panel-sidebar [data-view="apps"]').hidden=false;
-  $('hardware-options').hidden=id==='civswitch-ldn';
-  if(id==='civswitch-ldn')$('adv-usb-next').hidden=true;
-  $('civ-input-settings').hidden=id!=='civswitch';
-  if(civ){$('iz-flow').hidden=true;$('installation-options').hidden=true;}
+  $('hardware-options').hidden=false;
+  ;
+  ;
+  ;
 }
 
 let platformMenuStamp = '',
@@ -3563,18 +3525,12 @@ function renderAutomaticRpcStatus(meta) {
 function renderPlatform() {
   const meta = state?.platform;
   if (!meta) return;
-  const civ=['civswitch','civswitch-ldn'].includes(meta.loaderId);
-  $('civ-mode-selector').hidden=!civ;
-  for(const [id,engine] of [['civ-mode-usb','civswitch'],['civ-mode-ldn','civswitch-ldn']]){
-    $(id).classList.toggle('selected',meta.loaderId===engine);
-    $(id).setAttribute('aria-pressed',String(meta.loaderId===engine));
-  }
-  for(const [id,selectedGame]of [['game-sm4',!civ],['game-civ7',civ]]){
-    $(id).classList.toggle('selected',selectedGame);$(id).setAttribute('aria-pressed',String(selectedGame));$(id).disabled=busy||meta.locked;
-  }
+
+  ;
+  ;
   document.querySelector('.launch-selector').hidden=false;
-  $('engine-options').hidden=civ;
-  const shellId = civ?(state.civLauncher?.shell||'izlauncher'):meta.izModules?meta.variant||'izlauncher':null;
+  $('engine-options').hidden=false;
+  const shellId = (meta.izModules?meta.variant||'izlauncher':null);
   const shellName = meta.shells?.find(item => item.id === shellId)?.name || (meta.izModules ? 'IZ2S' : 'Core only');
   for (const button of document.querySelectorAll('[data-folder="shell"]')) {
     button.hidden = !shellId;
@@ -3584,7 +3540,7 @@ function renderPlatform() {
   }
   $('footer-shell').textContent = shellName;
   const locked = busy || meta.locked,
-    selected = !civ&&coreView.selected()?'iz2s-core':meta.loaderId;
+    selected = (coreView.selected())?'iz2s-core':meta.loaderId;
   const engineChoices = [];
   engineChoices.splice(Math.max(0,engineChoices.findIndex(item=>item.id==='izmysh')+1),0,{id:'iz2s-core',name:'IZ2S core',integrationStatus:coreText('engineCaption')});
   const inventoryStamp = JSON.stringify(
@@ -3622,15 +3578,15 @@ function renderPlatform() {
       const b = element('button', '', v.name);
       b.type = 'button';
       b.dataset.variant = v.id;
-      b.onclick = () => ['civswitch','civswitch-ldn'].includes(state.platform.loaderId)?act('/api/'+state.platform.loaderId,{action:'select-shell',launcher:v.id}):act('/api/launch-settings', { variant: v.id });
+      b.onclick = () => (act('/api/launch-settings', { variant: v.id }));
       shellSelect.append(b);
     }
   }
   document.querySelector('[data-step=bootstrap]').hidden =
     meta.loaders.find((l) => l.id === selected)?.menu?.sourceSetup === false;
-  $('iz-flow').hidden = !meta.izModules||['civswitch','civswitch-ldn'].includes(meta.loaderId);
+  $('iz-flow').hidden = !meta.izModules||false;
   const label = selected==='iz2s-core'?'IZ2S core':meta.loaders.find((l) => l.id === selected)?.name || selected;
-  coreView.render(!civ&&selected==='iz2s-core',locked,state);
+  coreView.render((selected==='iz2s-core'),locked,state);
   setText($('engine-folder-name'), label);
   setText($('engine-folder-path'), meta.loaders.find(loader => loader.id === selected)?.folder || 'Folder path is unavailable. Use the Engine button above.');
   renderIssueList('extension-errors', meta.extensionErrors);
@@ -3700,7 +3656,7 @@ function renderPlatform() {
   document.querySelectorAll('[data-variant]').forEach((button) => {
     button.classList.toggle(
       'selected',
-      button.dataset.variant === (civ?state.civLauncher?.shell||'izlauncher':meta.variant),
+      button.dataset.variant === ((meta.variant)),
     );
     button.disabled = locked;
   });
@@ -3743,7 +3699,7 @@ function renderPlatform() {
   if (menuStamp !== platformMenuStamp) {
     platformMenuStamp = menuStamp;
     $('upstream-menus').replaceChildren();
-    for (const loader of meta.loaders.filter(loader => !['civswitch','civswitch-ldn'].includes(loader.id))) {
+    for (const loader of meta.loaders.filter(loader => true)) {
       const id = loader.id;
       upstreamSteps[id] ??= 'launch';
       const panel = element('section', 'installation upstream-menu');
@@ -3967,8 +3923,8 @@ function renderPlatformControls() {
   const meta = state?.platform;
   if (!meta) return;
   const locked = serverUnavailable || busy || meta.locked;
-  $('game-sm4').disabled=locked;$('game-civ7').disabled=locked;
-  $('library-source-options').hidden=meta.variant==='original'||meta.loaderId==='civswitch';
+  ;
+  $('library-source-options').hidden=meta.variant==='original'||false;
   $('library-source').value=meta.sdLauncher?'sd':'pc';$('library-source').disabled=locked;
   $('library-source-note').textContent=meta.sdLauncher?'Install compatible apps to console SD in App library first. This source requires filesystem access.':'Load apps from the PC into RAM using Startup modules or App library. They are cleared when the game closes.';
   $('library-source-lock').textContent=state.active||meta.locked?'Stop the session to change the application source.':'Choose the source before starting the launcher.';
@@ -4101,10 +4057,9 @@ document
       (button.onclick = () =>
         act('/api/launch-settings', { loaderId: button.dataset.loader })),
   );
-$('game-civ7').onclick=()=>act('/api/launch-settings',{loaderId:state?.platform?.civswitchLdnAvailable===true?'civswitch-ldn':'civswitch',variant:'original'});
-$('civ-mode-usb').onclick=()=>act('/api/launch-settings',{loaderId:'civswitch',variant:'original'});
-$('civ-mode-ldn').onclick=()=>act('/api/launch-settings',{loaderId:'civswitch-ldn',variant:'original'});
-$('game-sm4').onclick=()=>act('/api/launch-settings',{loaderId:'iz2s-core',variant:state?.platform?.variant==='original'?'izlauncher':state.platform.variant});
+;
+;
+;
 document
   .querySelectorAll('[data-variant]')
   .forEach(
@@ -4236,10 +4191,9 @@ function poll(fresh = false) {
         {timeoutMs: initialRenderComplete ? 15000 : 120000});
       if (!current()) return;
       readingState = false;
-      const next = RUN21_CATALOG.normalizeSnapshot(snapshot),
-        civ = ['civswitch','civswitch-ldn'].includes(next.platform?.loaderId);
-      let tabs = civ ? [] : null;
-      if (!civ) {
+      const next = RUN21_CATALOG.normalizeSnapshot(snapshot);
+      let tabs = (null);
+      {
         await readFsRpcProof(next);
         if (!current()) return;
         try {
@@ -4250,7 +4204,7 @@ function poll(fresh = false) {
       }
       if (!current()) return;
       state = next;
-      workspaceReady = !civ && !!tabs;
+      workspaceReady = (!!tabs);
       const invalidTools = tabs ? workspace.sync(tabs) : 0;
       if (invalidTools) notice('Some tool tabs could not be restored. Open the tool again from App library.', 'warning', 'workspace-invalid');
       else if (tabs) {
@@ -4541,10 +4495,10 @@ async function downloadArmInstaller(profile) {
     const bytes = await response.arrayBuffer();
     const installer = (response.headers.get('content-disposition') || '').includes('.run')
       ? bytes : await IZ2S_ARM_INSTALLER.create(bytes);
-    saveDownload(new Blob([installer], {type:'application/octet-stream'}), profile === 'civ7' ? 'iz2s-civ7-arm-input.run' : 'iz2s-arm-input.run');
+    saveDownload(new Blob([installer], {type:'application/octet-stream'}), ('iz2s-arm-input.run'));
   } catch (error) { notice(error.message); }
 }
-$('arm-package-download').onclick=()=>downloadArmInstaller(state?.platform?.loaderId==='civswitch'?'civ7':'sb4');
+$('arm-package-download').onclick=()=>downloadArmInstaller(('sb4'));
 
 
 window.addEventListener('run21:languagechange', () => {

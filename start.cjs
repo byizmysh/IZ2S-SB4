@@ -46,7 +46,7 @@ async function main() {
           (r) => r.json(),
         );
       if (health.version !== 22 || !['0.25', 'RUN' + '25'].includes(health.edition) || health.pid !== previous.pid || health.preview !== preview)
-        throw Error('Stale IZ2S Platform window');
+        throw Error('Stale IZ2S SB4 window');
       running = true;
     } catch {}
   if (running) {
@@ -69,7 +69,7 @@ async function main() {
           main: true,
           env: { ...process.env, HB_OPEN_PANEL: '1' },
         });
-      console.log('IZ2S Platform is already running.');
+      console.log('IZ2S SB4 is already running.');
       return;
     }
   }
@@ -110,7 +110,7 @@ async function main() {
     started: new Date().toISOString(),
     workspaceInstance: process.env.IZ2S_PANEL_INSTANCE,
   });
-  console.log('IZ2S Platform');
+  console.log('IZ2S SB4');
   console.log(window.url);
   if (!noOpen)
     require('./core/services/open-panel.cjs').openPanel(window.url, {
@@ -141,7 +141,7 @@ async function main() {
 }
 if (require.main === module)
   main().catch((e) => {
-    console.error('IZ2S Platform: ' + e.message);
+    console.error('IZ2S SB4: ' + e.message);
     process.exitCode = 1;
   });
 module.exports = { main };

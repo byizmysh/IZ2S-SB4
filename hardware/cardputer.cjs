@@ -1,20 +1,19 @@
 'use strict';
 const fs=require('node:fs/promises'),path=require('node:path'),crypto=require('node:crypto');
-const FIRMWARES={sb4:'IZ2S-ADV-SB4.bin',civ:'IZ2S-ADV-CIV.bin'};
-function profileFile(profile='sb4'){if(!Object.hasOwn(FIRMWARES,profile))throw Error('Choose SB4 or CIV firmware');return FIRMWARES[profile];}
-const README=`IZ2S Cardputer ADV: separate SmileBASIC 4 and CivSwitch applications
+const FIRMWARES={sb4:'IZ2S-ADV-SB4.bin'};
+function profileFile(profile='sb4'){if(!Object.hasOwn(FIRMWARES,profile))throw Error('Choose SB4 firmware');return FIRMWARES[profile];}
+const README=`IZ2S Cardputer ADV: SmileBASIC 4 application
 
 SmileBASIC 4: Utilities/IZ2S-ADV-SB4.bin — original 0.21.3, USB boot keyboard only. This preserved release binary is not rebuilt.
-CivSwitch: Utilities/IZ2S-ADV-CIV.bin — 0.22.4, USB keyboard + controller. All 87 lines and controller actions are stored on SD before one autonomous batch starts. Network loss does not replay input.
 
-The IZ2S-ADV.bin compatibility filename contains the profile selected in the PC panel. Use the explicit SB4/CIV filename to avoid confusion.
+The IZ2S-ADV.bin compatibility filename contains the profile selected in the PC panel. Use the explicit SB4 filename to avoid confusion.
 
 1. Connect ADV to the PC. Choose USB Storage in M5Launcher and mount its SD card. Copy the selected application using the panel, or extract this package to SD.
 2. Eject the drive, exit USB Storage and install/run the appropriate application from SD > Utilities.
-3. Keep ADV connected to local Wi-Fi; use its screen IP in Device settings if automatic discovery is unavailable. Connect its USB data cable to Switch. Both versions use the same pairing and Wi-Fi configuration. Direct USB copying preserves existing Wi-Fi settings.
-4. SmileBASIC 4: English (US), fresh Direct screen, then First Setup or Launch. CivSwitch: follow the four-step PC wizard; controller A is automatic.
+3. Keep ADV connected to local Wi-Fi; use its screen IP in Device settings if automatic discovery is unavailable. Connect its USB data cable to Switch. Direct USB copying preserves existing Wi-Fi settings.
+4. SmileBASIC 4: English (US), fresh Direct screen, then First Setup or Launch.
 
-STOP in the panel requires Wi-Fi. G0 on ADV stops local input. USB disconnection or reboot never triggers input replay. CivSwitch batches tolerate network loss, with per-line and whole-job deadlines.
+STOP in the panel requires Wi-Fi. G0 on ADV stops local input. USB disconnection or reboot never triggers input replay.
 
 IZ2S/input.json contains the private pairing key. Preserve it. These application binaries do not replace the M5Launcher bootloader.
 `;
@@ -46,7 +45,7 @@ async function prepare(root,{profile='sb4',signal}={}){
  await require('../core/services/json-write.cjs').write(file,{token},{directoryMode:0o700});
  const configuration={ssid:'',password:'',token};
  signal?.throwIfAborted();
- await fs.writeFile(packagePath(root),zip([['Utilities/IZ2S-ADV-SB4.bin',images.sb4],['Utilities/IZ2S-ADV-CIV.bin',images.civ],['Utilities/IZ2S-ADV.bin',bytes],['IZ2S/input.json',JSON.stringify(configuration,null,2)+'\n'],['Utilities/IZ2S-ADV-README.txt',README]]),{mode:0o600});
+ await fs.writeFile(packagePath(root),zip([['Utilities/IZ2S-ADV-SB4.bin',images.sb4],['Utilities/IZ2S-ADV.bin',bytes],['IZ2S/input.json',JSON.stringify(configuration,null,2)+'\n'],['Utilities/IZ2S-ADV-README.txt',README]]),{mode:0o600});
  signal?.throwIfAborted();
  return {token,configuration,firmware:firmwarePath(root,profile),profile,filename:'Utilities/'+profileFile(profile),archive:packagePath(root),readme:README};
 }
@@ -93,6 +92,6 @@ async function install(root,{target,discover=media,profile='sb4',signal,onProgre
  await atomic('Utilities/IZ2S-ADV.bin',await fs.readFile(bundle.firmware));
  await atomic('IZ2S/input.json',JSON.stringify({...existing,ssid:existing.ssid||'',password:existing.password||'',token:bundle.token},null,2)+'\n');
  await atomic('Utilities/IZ2S-ADV-README.txt',README);
- return {ok:true,target:mounted,filename:bundle.filename,profile,version:profile==='sb4'?'0.21.3':'0.22.4',verified:true};
+ return {ok:true,target:mounted,filename:bundle.filename,profile,version:'0.21.3',verified:true};
 }
 module.exports={prepare,firmwarePath,profileFile,packagePath,README,media,install};

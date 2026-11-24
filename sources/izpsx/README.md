@@ -16,7 +16,7 @@ Install `izpsx-emulator-0.5.2.iza` through the platform App library. For a mount
 
 Download the module, SD package or complete corresponding source from [Releases](https://github.com/byizmysh/IZPSX-emulator/releases/latest). Each release includes `SHA256SUMS` for checking downloads.
 
-1. Install [IZ2S Platform](https://github.com/byizmysh/IZ2S-Platform/releases/latest) with the current compatible IZ2S menu. Its [README](https://github.com/byizmysh/IZ2S-Platform#readme) explains the SmileBASIC 4 and Civilization VII connection routes. This release targets Linux x64/ARM64 PC hosts.
+1. Install [IZ2S Platform](https://github.com/byizmysh/IZ2S-Platform/releases/latest) with the current compatible IZ2S menu. The [IZ2S SB4 README](https://github.com/byizmysh/IZ2S-SB4#readme) explains the SmileBASIC 4 edition. This release targets Linux x64/ARM64 PC hosts.
 2. Enable **Filesystem access** in the panel before launching. Wait until FS access is confirmed; an open browser tab alone does not mean that the console filesystem is available. If acquisition fails, follow the [platform FAQ](https://github.com/byizmysh/IZ2S-Platform/blob/main/FAQ.md) before another attempt.
 3. In **App library**, add `izpsx-emulator-0.5.2.iza`, then choose **Session memory (RAM)** or **SD card**. A second installation is unnecessary if the same content is already present.
 4. Open **IZPSX emulator → Games and BIOS → Connect SD card** in the panel. Provide your own 512 KiB `bios.bin` BIOS and supported game dumps; neither is included.

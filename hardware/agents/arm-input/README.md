@@ -1,9 +1,7 @@
 # IZ2S ARM Input · 1.1.1
 
-One Linux input agent serves SmileBASIC 4 and Civilization VII. It exposes a USB
-keyboard and a Switch-compatible controller. The PC supplies the plan; the ARM
-board types the selected line and presses A automatically. No manual A mode is
-exposed in the panel.
+The Linux input agent serves SmileBASIC 4. It exposes a USB keyboard and a
+Switch-compatible controller. The PC supplies the input plan.
 
 ## Requirements
 
@@ -43,16 +41,16 @@ autostart scripts from rebinding the same controller after iz2s-usb.service.
 
 ## Manual or password-only installation
 
-Download the ARM installer from Device settings or Civ7 USB step 2. Copy
-iz2s-civ7-arm-input.run (Civ7) or iz2s-arm-input.run (SB4) onto the ARM device:
+Download the ARM installer from Device settings. Copy
+iz2s-arm-input.run onto the ARM device:
 
 ```sh
-scp iz2s-civ7-arm-input.run USER@ARM_IP:/tmp/
+scp iz2s-arm-input.run USER@ARM_IP:/tmp/
 ssh USER@ARM_IP
-sudo python3 /tmp/iz2s-civ7-arm-input.run
+sudo python3 /tmp/iz2s-arm-input.run
 ```
 
-Both names contain the same verified keyboard + controller agent. The installer
+The installer contains the verified keyboard + controller agent. It
 needs only Python 3 and works without downloading anything on ARM. It verifies
 all embedded files before installation. `--check` checks the board without
 installing; `--check-package` checks only the embedded files on any PC. Do not
@@ -62,23 +60,15 @@ for existing deployment scripts and SSH installation.
 
 Use the same target folder in the panel. Offline copying by USB storage also
 works. If the board only supports a pre-existing keyboard setup, --keyboard-only
-keeps it for SmileBASIC; CivSwitch automatic input remains unavailable until
-both HID interfaces are ready. The panel does not fall back to manual A.
+keeps it for SmileBASIC.
 
 ## Connect and run
 
-Connect ARM USB data/OTG to Switch and check the connection. The panel requires
-keyboard + controller before CivSwitch input. Plans use distinct job IDs and
+Connect ARM USB data/OTG to Switch and check the keyboard connection.
+Plans use distinct job IDs and
 owned transient systemd services. A lost receipt/restart never replays a line.
 STOP releases both interfaces. Controller neutral reports continue while the
 keyboard types. The keyboard LED response is checked before text entry.
-
-CivSwitch: supported cartridge version 1.0.0, English (US) system/keyboard,
-MULTIPLAYER > WIRELESS > CREATE GAME > HOST LOBBY > CHAT. Confirm a fresh chat,
-then Start input. The same 87-line plan is used for ARM and ADV, including
-first/last-line controller timing, loader verification and optional save setup.
-Wireless may disconnect Switch IP networking during input; PC-to-ARM LAN and
-ARM-to-Switch USB are separate links.
 
 ## Troubleshooting and removal
 
@@ -98,12 +88,3 @@ Protocol sources: [Linux HID gadget](https://docs.kernel.org/usb/gadget_hid.html
 [configfs](https://docs.kernel.org/usb/gadget_configfs.html),
 [original CivSwitch HID descriptors](https://github.com/Gezine/CivSwitch).
 Physical ARM/Switch recognition still requires a hardware test.
-
-CivSwitch batches
------------------
-The complete 87-line source and keyboard/controller sequence are transferred
-before enqueueing one owned service job. Each committed line is reported only
-after its submission and separator actions complete. Losing SSH does not stop
-the local service. Never enqueue the same source again to recover a lost
-receipt; follow the existing job identity instead. Console focus and accepted
-characters cannot be verified from HID output alone.

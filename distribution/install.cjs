@@ -12,8 +12,8 @@ function run(program, args, options = {}) {
 }
 function defaultDestination(version, {platform = process.platform, home = os.homedir(), env = process.env} = {}) {
   const join = platform === 'win32' ? path.win32.join : path.join;
-  const base = platform === 'win32' ? join(env.LOCALAPPDATA || join(home, 'AppData/Local'), 'IZ2S Platform') :
-    platform === 'darwin' ? join(home, 'Library/Application Support/IZ2S Platform') : join(env.XDG_DATA_HOME || join(home, '.local/share'), 'iz2s-platform');
+  const base = platform === 'win32' ? join(env.LOCALAPPDATA || join(home, 'AppData/Local'), 'IZ2S SB4') :
+    platform === 'darwin' ? join(home, 'Library/Application Support/IZ2S SB4') : join(env.XDG_DATA_HOME || join(home, '.local/share'), 'iz2s-sb4');
   return join(base, 'releases', version + '-' + new Date().toISOString().replace(/[^0-9]/g, ''));
 }
 async function copySource(source,destination){return require('./runtime-files.cjs').copySource(source,destination);}
@@ -34,11 +34,11 @@ async function findProgram(folder, filename, depth = 2) {
 async function shortcut(root, {platform = process.platform, execute = run} = {}) {
   if (platform === 'win32') return execute('powershell.exe', ['-NoProfile','-ExecutionPolicy','Bypass','-File',path.join(root,'distribution/shortcut-windows.ps1'),'-Root',root]);
   if (platform === 'darwin') {
-    const app = path.join(os.homedir(),'Applications/IZ2S Platform.app/Contents');
+    const app = path.join(os.homedir(),'Applications/IZ2S SB4.app/Contents');
     await fs.mkdir(path.join(app, 'MacOS'), {recursive: true});
     const quote = value => "'" + value.replace(/'/g, "'\\''") + "'";
     await fs.writeFile(path.join(app, 'MacOS/IZ2S'), '#!/bin/sh\nexec /usr/bin/open -a Terminal ' + quote(path.join(root,'Start.command')) + '\n', {mode: 0o755});
-    await fs.writeFile(path.join(app, 'Info.plist'), '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleIdentifier</key><string>io.iz2s.platform</string><key>CFBundleName</key><string>IZ2S Platform</string><key>CFBundleExecutable</key><string>IZ2S</string><key>CFBundlePackageType</key><string>APPL</string></dict></plist>\n');
+    await fs.writeFile(path.join(app, 'Info.plist'), '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleIdentifier</key><string>io.iz2s.sb4</string><key>CFBundleName</key><string>IZ2S SB4</string><key>CFBundleExecutable</key><string>IZ2S</string><key>CFBundlePackageType</key><string>APPL</string></dict></plist>\n');
   }
 }
 async function install({source = SOURCE, destination, nodeHome, platform = process.platform, arch = process.arch,

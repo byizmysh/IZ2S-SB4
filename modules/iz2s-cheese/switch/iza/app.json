@@ -3,7 +3,7 @@
   "abi": 1,
   "id": "iz2s-cheese",
   "name": "IZ2S Cheese",
-  "version": "0.8.0",
+  "version": "0.8.7",
   "description": "Install Switch 2 homebrew from SD or GitHub",
   "icon": "assets/icon.png",
   "transition": "none",
@@ -19,17 +19,6 @@
     "format": "iz2s.native-app",
     "abi": 7,
     "code": "native.bin",
-    "dataBytes": 4096,
-    "capabilities": [
-      "engine-image"
-    ],
-    "assets": [
-      {
-        "file": "asset-e4bcb96b8cc912ad977082b9f84dbf87c7d71c25979c595aee0ed35cc3f81c6d.izdata",
-        "path": "asset-e4bcb96b8cc912ad977082b9f84dbf87c7d71c25979c595aee0ed35cc3f81c6d.izdata",
-        "bytes": 94944,
-        "sha256": "e4bcb96b8cc912ad977082b9f84dbf87c7d71c25979c595aee0ed35cc3f81c6d"
-      }
-    ]
+    "dataBytes": 4096
   }
 }

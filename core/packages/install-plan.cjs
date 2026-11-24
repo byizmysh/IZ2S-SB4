@@ -2,7 +2,7 @@
 // Validate the complete destination selection before creating any durable job.
 function sessionEligibility(manifest,{engine=process.env.IZ15_LOADER}={}){
  if(engine&&Array.isArray(manifest.requirements?.engines)&&!manifest.requirements.engines.includes(engine))return {compatible:false,reason:'This experiment is available in SmileBASIC 4 only'};
- if(['civswitch','civswitch-ldn'].includes(engine)&&(manifest.native||manifest.localRuntime))return {compatible:false,reason:'This native application needs a Civ7 executor'};
+ ;
  if(manifest.sdOnly)return {compatible:false,reason:'This application must be installed on SD'};
  if(manifest.native&&!manifest.hostRuntime||manifest.localRuntime&&!manifest.hostRuntime)return {compatible:false,reason:'This application requires the autonomous SD launcher'};
  return {compatible:true};

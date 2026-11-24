@@ -22,11 +22,10 @@ function create(backend,{id,execution}={}){
  function status(){const rows=[...jobs];return {format:'iz2s.app-rpc-scope/1',...identity,state:phase,started,mutations,segments,revocations,pendingMutations:rows.filter(row=>!row.read).length,pendingObservations:rows.filter(row=>row.read).length,resourcesRetained:!!failure,nativeThreadsProven:false};}
  async function transfer(source,name,args){
   const [address,value]=args,valid=Number.isSafeInteger(address)&&(name==='write'?Buffer.isBuffer(value)&&value.length<=MAX:Number.isInteger(value)&&value>=0&&value<=MAX),length=name==='write'?value?.length:value;
-  // CivSwitch already performs native fills/streaming below this interface.
   // Splitting that call would turn one native fill into sixteen operations.
   // A generation-guarded backend checks every native packet itself; splitting
   // its upload here repeats mapping queries without strengthening revocation.
-  if(source!==backend||backend.nativeABI==='civswitch'||backend.generationGuarded===true&&name==='write'||!['read','write'].includes(name)||!valid||length<=CHUNK){segments++;return Reflect.apply(source[name],source,args);}
+  if(source!==backend||false||backend.generationGuarded===true&&name==='write'||!['read','write'].includes(name)||!valid||length<=CHUNK){segments++;return Reflect.apply(source[name],source,args);}
   const parts=[];
   for(let at=0;at<length;at+=CHUNK){
    // The canonical client already transfers in 512 KiB chunks. Keeping that

@@ -1,16 +1,16 @@
 'use strict';
 (function(root){
  function session(state){
-  const civ=state?.civLauncher,active=state?.active;
-  const running=active?.status==='running'||civ?.state==='running';
-  const retained=!!active||['running','offline','starting','stopping'].includes(civ?.state);
-  const offline=civ?.state==='offline'||active?.status==='offline'||!!state?.offline||retained&&!!state?.link&&['waiting-for-dock','waiting-for-network','offline'].includes(state.link.state);
-  const stopping=active?.status==='stopping'||civ?.state==='stopping';
-  const unconfirmed=stopping&&(active?.nativeParentRetention?.awaitingActualClose||civ?.shutdownUnconfirmed);
-  return {running,offline,stopping,unconfirmed:!!unconfirmed,compact:running||offline||stopping&&active?.kind!=='bootstrap',title:unconfirmed?'Shutdown unconfirmed':stopping?'Disconnecting\u2026':offline?'Connection interrupted':running?'Session is running':'Connection',game:['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId)?'Civilization VII':'SmileBASIC 4',launcher:(civ?.shell||state?.platform?.variant)==='izpslauncher'?'IZPSlauncher':(civ?.shell||state?.platform?.variant)==='original'?'Core only':'IZ2S'};
+  const active=state?.active;
+  const running=active?.status==='running'||false;
+  const retained=!!active||false;
+  const offline=(active?.status==='offline')||!!state?.offline||retained&&!!state?.link&&['waiting-for-dock','waiting-for-network','offline'].includes(state.link.state);
+  const stopping=active?.status==='stopping'||false;
+  const unconfirmed=stopping&&(active?.nativeParentRetention?.awaitingActualClose||undefined);
+  return {running,offline,stopping,unconfirmed:!!unconfirmed,compact:running||offline||stopping&&active?.kind!=='bootstrap',title:unconfirmed?'Shutdown unconfirmed':stopping?'Disconnecting\u2026':offline?'Connection interrupted':running?'Session is running':'Connection',game:('SmileBASIC 4'),launcher:((state?.platform?.variant))==='izpslauncher'?'IZPSlauncher':((state?.platform?.variant))==='original'?'Core only':'IZ2S'};
  }
  function directNetwork(state){
-  if(!state?.platform||['civswitch','civswitch-ldn'].includes(state.platform.loaderId)||state.active?.kind==='bootstrap')return false;
+  if(!state?.platform||false||state.active?.kind==='bootstrap')return false;
   const initializing=state.active?.kind==='launch'&&state.active.launchStage==='initializing';
   return !!state.connected||initializing||session(state).compact||connectionMode(state).available;
  }
@@ -54,7 +54,7 @@
  }
  function library(state){
   const packages=[...(state.library||[])],known=new Set(packages.map(p=>p.id));
-  if(['civswitch','civswitch-ldn'].includes(state.platform?.loaderId))return packages;
+  ;
   for(const entry of [...(state.sdInstalled||[]),...(state.platform?.sdLauncher?state.installed||[]:[])]){
    const row=typeof entry==='string'?{id:entry}:entry;if(!row?.id||known.has(row.id))continue;known.add(row.id);
    packages.push({...row,name:row.name||row.id,version:row.versionVerified?row.version:null,bytes:row.bytes||0,icon:row.id==='iz-reconnect'?'/reconnect.svg':row.icon||'/icon.svg',description:'Installed on SD. The PC package is not available.',supported:false,sdOnly:true,sd:{compatible:true}});
@@ -64,9 +64,9 @@
  // Console inventory only: never infer RAM presence from PC files or startup choices.
  function consoleApps(state){
   if(!state?.connected)return [];
-  const civ=['civswitch','civswitch-ldn'].includes(state.platform?.loaderId),sdMode=!!state.platform?.sdLauncher;
+  const sdMode=!!state.platform?.sdLauncher;
   const ram=new Set((sdMode?[]:state.installed||[]).map(row=>typeof row==='string'?row:row.id));
-  const sd=new Set((civ?[]:[...(state.sdInstalled||[]),...(sdMode?state.installed||[]:[])]).map(row=>typeof row==='string'?row:row.id));
+  const sd=new Set((([...(state.sdInstalled||[]),...(sdMode?state.installed||[]:[])])).map(row=>typeof row==='string'?row:row.id));
   const packages=library(state),known=new Set(packages.map(p=>p.id));
   for(const entry of state.installed||[]){const row=typeof entry==='string'?{id:entry}:entry;if(row?.id&&!known.has(row.id)){packages.push({id:row.id,name:row.name||row.id,icon:row.id==='iz-reconnect'?'/reconnect.svg':row.icon||'/icon.svg'});known.add(row.id);}}
   return packages.filter(p=>ram.has(p.id)||sd.has(p.id)).map(p=>({id:p.id,name:p.name,icon:p.icon||'/icon.svg',ram:ram.has(p.id),sd:sd.has(p.id)}));

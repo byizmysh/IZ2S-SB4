@@ -1,17 +1,18 @@
 {
   "version": "0.25.2",
-  "tag": "v0.25.2",
+  "tag": "v0.25.2-sb4.1",
+  "repository": "https://github.com/byizmysh/IZ2S-SB4",
   "assets": [
     {
-      "archive": "IZ2S-Platform-0.25.2-linux.tar.gz",
-      "bytes": 348791531,
-      "sha256": "6b2e9fe25df768c8fce41aa681949a14cbf72e395547489d0a43a9a20eae54d8",
+      "archive": "IZ2S-SB4-0.25.2-linux.tar.gz",
+      "bytes": 345416908,
+      "sha256": "da4d5a54668b5edbe96ffca1dbba20930657cfb7e5b959d32b67e9a5f288b453",
       "target": "linux"
     },
     {
-      "archive": "IZ2S-Platform-0.25.2-windows-x64.zip",
-      "bytes": 99532908,
-      "sha256": "8fcef3ac32d94da2b4f3053c44f438dc5963ab6fb4fe9d70f0fb5bd1bcf16b68",
+      "archive": "IZ2S-SB4-0.25.2-windows-x64.zip",
+      "bytes": 95837926,
+      "sha256": "16b2b4c2c29a3e4a777d251e9a610606a9170deaffc87e12d0ef7300e3e38636",
       "target": "windows-x64"
     }
   ]

@@ -80,7 +80,6 @@ async function createWindowServer({
     '/storage.js': ['storage.js', 'text/javascript; charset=utf-8'],
     '/startup.js': ['startup.js', 'text/javascript; charset=utf-8'],
     '/cardputer-setup.js': ['cardputer-setup.js', 'text/javascript; charset=utf-8'],
-    '/civswitch.js': ['civswitch.js', 'text/javascript; charset=utf-8'],
     '/style.css': ['style.css', 'text/css; charset=utf-8'],
     '/icon.svg': ['icon.svg', 'image/svg+xml'],
   };
@@ -313,7 +312,7 @@ async function createWindowServer({
         if(browserMedia==='stop')return reply(res,200,await blitBrowser.stop((await readBody(req)).id));
         return reply(res,200,await blitBrowser.relay(req,browserMedia));
       }
-      const body = await readBody(req, url.pathname === '/api/civswitch-ldn' ? 131072 : 16384);
+      const body = await readBody(req, 16384);
       if(url.pathname==='/api/iz2s-core/ftp/open'){
         if(manager.preview)return reply(res,403,{error:'Preview cannot connect to the console.'});
         return reply(res,200,await require('../engines/iz2s-core/tools/pc-link-files.cjs').openFtp(root,body,{panelUrl:origin}));
@@ -484,8 +483,6 @@ async function createWindowServer({
         if(url.pathname==='/api/connection/restore')return manager.restoreConnection();
         if (url.pathname === '/api/start') return manager.begin(body);
         if (url.pathname === '/api/setup') return manager.setupAction(body);
-        if (url.pathname === '/api/civswitch') return manager.civswitchAction(body);
-        if (url.pathname === '/api/civswitch-ldn') return manager.civswitchLdnAction(body);
         if (url.pathname === '/api/retry') return manager.retry();
         if (url.pathname === '/api/iz2s-core/sd/select') return coreController.sdStore.select(body.target);
         if (body.store === 'core-sd') {

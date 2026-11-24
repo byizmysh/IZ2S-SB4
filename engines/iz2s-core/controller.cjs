@@ -49,7 +49,7 @@ function create({root,manager,out=DEFAULT_OUT,launch=spawn,inputFactory,checkPor
   starting=true;
   try{
    const panel=await manager.snapshot();
-   if(panel.active||panel.connected||['running','starting','stopping','offline'].includes(panel.civLauncher?.state))throw Error('Finish the active panel session first.');
+   if(panel.active||panel.connected||false)throw Error('Finish the active panel session first.');
    // Reuse IZ2S Core's resolved address, including its LAN/Wi-Fi selection.
    const host=panel.settings?.consoleHost||panel.connections?.devices?.server?.address;
    if(!net.isIPv4(host||'')||!hosts().includes(host))throw Error('No active PC address on the Switch network. Check the server card.');
@@ -109,7 +109,7 @@ function create({root,manager,out=DEFAULT_OUT,launch=spawn,inputFactory,checkPor
   if(!['begin','verify','compare','save','saved'].includes(action))throw Error('Unknown First Setup step.');
   starting=true;
   try{
-   const panel=await manager.snapshot();if(panel.active||panel.connected||['running','starting','stopping','offline'].includes(panel.civLauncher?.state))throw Error('Finish the active panel session first.');
+   const panel=await manager.snapshot();if(panel.active||panel.connected||false)throw Error('Finish the active panel session first.');
    if(action==='begin'){
     if(setupOwned())throw Error('First Setup is already active. Finish or stop it.');
     if(!body.screenReady)throw Error('Confirm that Direct is open and the selected slot is empty.');

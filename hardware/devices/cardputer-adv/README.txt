@@ -1,11 +1,9 @@
 IZ2S Platform - Cardputer ADV input
-Firmware application: 0.22.3 (M5Launcher file IZ2S-ADV.bin)
+Firmware application: 0.21.3 (M5Launcher file IZ2S-ADV.bin)
 
 Select Cardputer ADV as the input device in the panel. ARM PC is not required.
-The PC preloads the text/actions onto ADV SD; later Wi-Fi commands choose an
-action. ADV provides two independent USB HID interfaces: a Switch wired
-controller and a boot keyboard. SM4 uses the keyboard; automatic CivSwitch
-input also presses controller A between chat lines. One IZ2S-ADV.bin serves both.
+ADV provides a USB boot keyboard for SmileBASIC 4. IZ2S-ADV.bin contains the
+same application as IZ2S-ADV-SB4.bin.
 
 FIRST SETUP
 1. Connect ADV to the PC and choose USB storage in M5Launcher.

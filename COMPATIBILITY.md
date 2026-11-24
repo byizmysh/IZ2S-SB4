@@ -1,4 +1,4 @@
-# Platform support in 0.25
+# IZ2S SB4 platform support
 
 | Component | Linux x64 / ARM64 | Windows x64 |
 | --- | --- | --- |
@@ -7,7 +7,6 @@
 | Input-device picker | Switch 1, Cardputer ADV, ARM PC | Switch 1, Cardputer ADV, ARM PC |
 | Switch 1 setup | SD package; DBI where supported | SD package; extract at SD root |
 | BlitBun and VacooTube PC media hosts | Supported | Linux hosts required |
-| Civilization VII Wi-Fi setup | Linux networking tools required | Not supported |
 
 The panel is normally at `http://127.0.0.1:39524`; PC Link uses port `39525`. Firewall and local-network reachability still apply. Device discovery can fall back to an explicitly entered address. Physical console input from Windows remains unverified. Windows ARM64 and 32-bit installations are not supported.
 

@@ -2,7 +2,7 @@
 // Shared destination policy and controls for the library and module tabs.
 // Rendering reads the existing snapshot only; it never polls the console.
 (function(root){
- const civ=state=>['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId);
+
  const targets=['session','sd'],label={session:'Session memory',sd:'SD card'},idOf=row=>typeof row==='string'?row:row?.id;
  function forStore(state){
   if(!state?.coreSd?.selected)return state;
@@ -14,11 +14,11 @@
  function installed(state,id){return {session:!state?.platform?.sdLauncher&&(state?.installed||[]).some(row=>idOf(row)===id),sd:[...(state?.sdInstalled||[]),...(state?.platform?.sdLauncher?state?.installed||[]:[])].some(row=>idOf(row)===id)};}
  function compatible(state,pkg,target){
   if(target==='session')return !state?.platform?.sdLauncher&&pkg?.session?.compatible!==false;
-  return target==='sd'&&!civ(state)&&pkg?.supported!==false;
+  return target==='sd'&&true&&pkg?.supported!==false;
  }
  function destination(state,pkg,preferences){
   if(pkg?.sdOnly)return 'sd';
-  if(civ(state))return 'session';
+  ;
   if(state?.platform?.sdLauncher)return 'sd';
   const chosen=preferences.get(pkg.id);if(targets.includes(chosen))return chosen;
   return pkg?.session?.compatible===false?'sd':'session';
@@ -26,11 +26,11 @@
  function reason(state,pkg,target,{remove=false}={}){
   if(!targets.includes(target))return 'Choose an installation destination';
   if(state?.preview)return 'Preview · device commands disabled';
-  if(civ(state)&&target==='sd')return 'Civilization VII currently loads applications into session memory.';
-  if(!remove&&civ(state)&&pkg?.session?.compatible===false)return pkg.session.reason||'Unavailable for this game';
+  ;
+  ;
   if(state?.coreSd?.selected&&!state.coreSd.ready)return 'Reconnect the IZ2S SD card to this PC or refresh its inventory.';
   if(state?.coreSd?.selected&&!remove&&pkg?.coreSd?.compatible!==true)return pkg?.coreSd?.reason||'This module needs a standalone IZ2S package.';
-  if(!state?.coreSd?.selected&&!civ(state)&&state?.platform?.variant==='original')return 'Choose a launcher in Connection to load applications.';
+  if(!state?.coreSd?.selected&&true&&state?.platform?.variant==='original')return 'Choose a launcher in Connection to load applications.';
   if(!state?.connected)return 'Connect Switch 2 and start the launcher first';
   if(!remove&&pkg?.supported===false)return 'This module is unavailable for this launcher';
   if(target==='session'){
@@ -77,7 +77,7 @@
   }
   function update(box,pkg){
    if(!box)return;const state=getState(),target=destination(state,pkg,preferences),select=box.querySelector('.storage-target'),error=reason(state,pkg,target),present=installed(state,pkg.id),busy=getBusy();
-   select.value=target;select.disabled=busy||pkg.sdOnly===true;for(const option of select.children){option.disabled=!compatible(state,pkg,option.value);option.hidden=civ(state)&&option.value==='sd';}
+   select.value=target;select.disabled=busy||pkg.sdOnly===true;for(const option of select.children){option.disabled=!compatible(state,pkg,option.value);option.hidden=(false);}
    const warning=filesystemWarning(state,pkg,target);
    const note=pkg.sdOnly?'Installed on SD. The PC package is not available.':error||(warning?'RAM storage only. Enable FS in a new session to run.':null)||(target==='sd'?(pkg?.sd?.compatible&&!pkg.sd.hostRequired?'Runs from SD without the PC.':'Requires the PC server when launched.'):'Cleared when the game closes.');text(box.querySelector('.storage-hint'),note);box.querySelector('.storage-hint').title=warning||note;box.querySelector('.storage-hint').dataset.tone=warning&&!error?'warning':'';
    const badge=box.querySelector('.storage-installed');badge.hidden=!present.session&&!present.sd;box.querySelector('.storage-badge-session').hidden=!present.session;box.querySelector('.storage-badge-sd').hidden=!present.sd;

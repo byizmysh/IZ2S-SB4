@@ -13,9 +13,9 @@ async function files(root){
 }
 async function archive(root){await files(root);return path.join(root,'hardware/agents/arm-input/packages/iz2s-arm-input.tar.gz');}
 async function installer(root,profile='sb4'){
- if(!['sb4','civ7'].includes(profile))throw Error('Choose an ARM input profile');
+ if(profile!=='sb4')throw Error('Choose an ARM input profile');
  await files(root);
- const file=path.join(root,'hardware/agents/arm-input/packages',profile==='civ7'?'iz2s-civ7-arm-input.run':'iz2s-arm-input.run');
+ const file=path.join(root,'hardware/agents/arm-input/packages','iz2s-arm-input.run');
  const script=await fs.readFile(file,'utf8'),digest=/ARCHIVE_SHA256 = '([a-f0-9]{64})'/.exec(script)?.[1];
  const bytes=await fs.readFile(await archive(root));
  if(!digest||crypto.createHash('sha256').update(bytes).digest('hex')!==digest)throw Error('ARM installer is outdated; rebuild input packages');

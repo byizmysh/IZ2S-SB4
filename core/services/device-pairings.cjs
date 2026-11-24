@@ -14,12 +14,12 @@ async function candidates(kind,{file=locations().file,applications=locations().a
  // One-time adoption from applications registered by this user. Read only
  // their credential records, never execute or require another copy's code.
  const type=types[kind];if(!type)return [];
- for(const name of (await fs.readdir(applications).catch(()=>[])).filter(n=>/^izlauncher(?:-run\d+)?\.desktop$/.test(n)).slice(0,32)){
+ for(const name of (await fs.readdir(applications).catch(()=>[])).filter(n=>/^(?:izlauncher(?:-run\d+)?|iz2s-sb4)\.desktop$/.test(n)).slice(0,32)){
   try{
    const entry=await fs.readFile(path.join(applications,name),'utf8');
    const match=/^Exec="([^"\n]+\/start(?:-run\d+)?\.sh)"\s*$/m.exec(entry);if(!match)continue;
    const directory=await fs.realpath(path.dirname(match[1]));if(directory===root)continue;
-   if((await json(path.join(directory,'package.json'))).name!=='iz2s-platform')continue;
+   if(!['iz2s-platform','iz2s-sb4'].includes((await json(path.join(directory,'package.json'))).name))continue;
    const profile=(await json(path.join(directory,'data/state/launch-configurations.json'))).profiles?.[type.profile];
    const token=String(profile?.[type.key]||'').replace(/[\s-]/g,'').toLowerCase();
    const row={kind,token,endpoint:profile?.[type.address]||'',port:profile?.switchPort||24872,source:'registered-application'};

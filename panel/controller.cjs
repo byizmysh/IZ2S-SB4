@@ -136,9 +136,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
     });
     delivery = null;
     iz = null;
-    const sessionFactory = ['civswitch', 'civswitch-ldn'].includes(choice.loaderId)
-      ? require(path.join(selectedLoader().folder, 'adapter.cjs')).createSession
-      : require('./upstream-session.cjs').create;
+    const sessionFactory = (require('./upstream-session.cjs').create);
     upstream = sessionFactory({
       root,
       settings,
@@ -171,7 +169,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
   }
   async function prepareCardputerBundle(signal){
     signal.throwIfAborted();
-    const bundle=await require('../hardware/cardputer.cjs').prepare(root,{profile:choice.loaderId==='civswitch'?'civ':'sb4',signal});
+    const bundle=await require('../hardware/cardputer.cjs').prepare(root,{profile:('sb4'),signal});
     signal.throwIfAborted();
     const id='pc-cardputer-adv';configState=await configurations.load(root);
     await configurations.save(root,{selected:configState.selected,profiles:{...configState.profiles,[id]:{
@@ -218,7 +216,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
         throw Error('Download or manually install the original engine first');
       if (!available(choice.loaderId, choice.variant))
         throw Error('Selected loader is unavailable for IZ2S');
-      if(configuration.inputAdapter==='switch-wifi'&&['civswitch','civswitch-ldn'].includes(choice.loaderId))throw Error('Select ARM PC or Cardputer ADV for Civilization VII controller input. Switch 1 keyboard is configured for SmileBASIC 4.');
+      ;
       if (choice.loaderId === 'iz2s-core') throw Error('Use the IZ2S core launch action.');
       return engine().begin(body);
     },
@@ -228,9 +226,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
     async snapshot() {
       await reconcileInstallation();
       const state = await engine().snapshot(),
-        // CivSwitch has no IZA runtime. Do not verify the SmileBASIC app library
-        // just to open its game setup or refresh progress.
-        moduleInventory = isIZ() || state.civLauncher?.state==='running' ? await require('../core/modules.cjs').metadata(root) : {modules: [], errors: []},
+        moduleInventory = isIZ() || false ? await require('../core/modules.cjs').metadata(root) : {modules: [], errors: []},
         extensions = require('../core/extensions.cjs').catalog(root);
       const library = isIZ() ? await readCoreLibrary() : null;
       let base, current, baseSource;
@@ -261,21 +257,21 @@ async function create({ root, settings: defaults, node, preview = false }) {
         fsRpc: state.active?.runDirectory
           ? await readJson(path.join(state.active.runDirectory, 'fs-rpc-state.json'), null)
           : null,
-        checks:choice.loaderId==='civswitch-ldn'?state.checks:require('../hardware/index.cjs').present(configuration,state.checks),
+        checks:(require('../hardware/index.cjs').present(configuration,state.checks)),
         moduleCatalog: moduleInventory.modules.map((m) => m.descriptor).filter(panelCatalog.visible),
         moduleErrors: [...moduleInventory.errors, ...(library?.errors || [])],
         moduleStates: require('../core/host-modules.cjs').status(),
         hardwareOperation:cardputerOperation.snapshot(),
         version: 22,
         platform: {
-          civswitchLdnAvailable: true,
+
           preparationCancelAvailable:true,
           host: { platform: process.platform, architecture: process.arch },
           loaderId: choice.loaderId,
           variant: choice.variant,
           consoleEndpoint: {port:settings.consolePort,
-            host:choice.loaderId==='civswitch-ldn' ? state.civswitchLdn?.suggestedHost||settings.consoleAddress : choice.loaderId==='civswitch' ? state.civswitch?.networkHost||settings.consoleAddress : settings.consoleHost,
-            listener:['civswitch','civswitch-ldn'].includes(choice.loaderId)?'console':'pc'},
+            host:((settings.consoleHost)),
+            listener:('pc')},
           sdLauncher: choice.sdLauncher===true,
           nativeRecovery: selectedLoader().settings.fsRpcMode===true,
           residentGraphics: choice.residentGraphics===true,
@@ -302,7 +298,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
                 ),
               }
             : null,
-          izModules: isIZ() || state.civLauncher?.state==='running',
+          izModules: isIZ() || false,
           baseSource,
           delivery: {
             application: isIZ() ? (choice.variant === 'izpslauncher' ? 'IZPSlauncher' : 'IZ2S') : 'Core only',
@@ -531,14 +527,8 @@ async function create({ root, settings: defaults, node, preview = false }) {
     },
     configureConnection: (...args) => engine().configureConnection(...args),
     setupAction: (body) => engine().setupAction(body),
-    async civswitchAction(body) {
-      if (choice.loaderId !== 'civswitch' || isIZ()) throw Error('Select CivSwitch in Core only first');
-      return upstream.action(body);
-    },
-    async civswitchLdnAction(body) {
-      if (choice.loaderId !== 'civswitch-ldn' || isIZ()) throw Error('Select CIV7 LAN in Core only first');
-      return upstream.action(body);
-    },
+
+
     retry: () => engine().retry(),
     setupReport: (...args) => engine().setupReport(...args),
     remove: async (id) => {
@@ -558,7 +548,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
       return rpc.request({command:'recovery-wake'});
     },
     loadPackages: async (ids,options) => {
-      if(['civswitch','civswitch-ldn'].includes(choice.loaderId))return upstream.loadPackages(ids,options);
+      ;
       if (!isIZ()) throw Error('Select a console shell to load IZA modules');
       if(choice.sdLauncher||options?.target==='sd'||Object.values(options?.targets||{}).includes('sd')){
         if(preview)throw Error('Preview cannot write to SD');
@@ -566,7 +556,7 @@ async function create({ root, settings: defaults, node, preview = false }) {
       throw Error('Use the IZ2S core app library to install applications.');
     },
     unloadPackages: async (ids,target) => {
-      if(['civswitch','civswitch-ldn'].includes(choice.loaderId))return upstream.unloadPackages(ids,target);
+      ;
       if(preview)throw Error('Preview cannot remove console modules');
       if(!isIZ())throw Error('Select a console shell to remove modules');
       if(choice.residentGraphics&&(await engine().snapshot()).active)throw Error('Restart the resident session to change its prepared app set');

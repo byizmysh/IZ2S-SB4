@@ -26,7 +26,7 @@ try {
 switch ($Architecture) { 'x64' {} 'amd64' {} default {throw 'This installer requires Windows x64. Windows ARM64 and 32-bit Windows are not supported.'} }
 $Arch = 'x64'
 if (-not $env:LOCALAPPDATA) { throw 'A normal Windows user profile with LOCALAPPDATA is required.' }
-$Bootstrap = Join-Path $env:LOCALAPPDATA ('IZ2S Platform\bootstrap\node-' + $Arch)
+$Bootstrap = Join-Path $env:LOCALAPPDATA ('IZ2S SB4\bootstrap\node-' + $Arch)
 $Node = Join-Path $Bootstrap 'node.exe'
 if (-not (Test-Path -LiteralPath $Node)) {
   Write-Host 'Downloading a private Node.js 24 runtime and verifying its SHA-256...'

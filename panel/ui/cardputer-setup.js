@@ -63,7 +63,7 @@ globalThis.IZ2S_ADV_SETUP = (() => {
     };
     function render({state,busy=false,serverUnavailable=false,manual=false,preparation=null}) {
       const adapter=state?.platform?.configuration?.inputAdapter;
-      const showHardware=!manual&&state?.platform?.loaderId!=='civswitch-ldn';
+      const showHardware=!manual&&true;
       const adv=showHardware&&adapter==='cardputer-wifi';
       const switchKeyboard=showHardware&&adapter==='switch-wifi';
       $('cardputer-setup').hidden=!adv;

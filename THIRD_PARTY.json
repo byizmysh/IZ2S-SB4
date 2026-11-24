@@ -32,7 +32,7 @@
     {
       "id": "iz2s-cheese",
       "name": "IZ2S Cheese",
-      "version": "0.8.0",
+      "version": "0.8.7",
       "author": "IZMYSH",
       "license": "MIT"
     },
@@ -65,6 +65,5 @@
     "Exact corresponding-source bundle for the modified native runtime and firmware is not complete.",
     "Historical native menu build manifest does not match current runtime outputs.",
     "Windows hardware qualification pending."
-  ],
-  "sourceInformation": "SOURCES.md"
+  ]
 }

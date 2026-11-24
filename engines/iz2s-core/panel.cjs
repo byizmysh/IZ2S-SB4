@@ -187,8 +187,7 @@ function create(options = {}) {
     },
     downloadLog: (id, res) => downloadLog(out, id, res),
     assertAvailable(route) {
-      if (runtime.running() && ['/api/start', '/api/retry', '/api/setup', '/api/civswitch',
-        '/api/civswitch-ldn', '/api/connection', '/api/launch-settings', '/api/connection/restore'].includes(route)) {
+      if (runtime.running() && ['/api/start', '/api/retry', '/api/setup', '/api/connection', '/api/launch-settings', '/api/connection/restore'].includes(route)) {
         throw Error('An IZ2S attempt is already active. Stop it first.');
       }
     },

@@ -1,8 +1,8 @@
 [
   {
     "path": "AUTHORS.md",
-    "bytes": 724,
-    "sha256": "54ff59a89bff1cc1bd1b21a49a68cec01811cbab0d7c40f5afc56aadebe15c38"
+    "bytes": 884,
+    "sha256": "0eae9a5026c6712c349a890a1b32b45abc7d3f241721f3b7bc09f566e456c47f"
   },
   {
     "path": "COPYRIGHT",
@@ -21,8 +21,8 @@
   },
   {
     "path": "LICENSES/copyrights.json",
-    "bytes": 58857,
-    "sha256": "f097ce12653a7a398c45841f449f567bc0d028451c018e3662a81fe4f3435ae1"
+    "bytes": 27274,
+    "sha256": "040f4ce4783acb3def6b8e959cacc8e27187479f471f8d316c0d66527a185be0"
   },
   {
     "path": "LICENSES/native-linked/3rdparty/cpuinfo/LICENSE",
@@ -126,138 +126,13 @@
   },
   {
     "path": "LICENSES/notices.json",
-    "bytes": 26600,
-    "sha256": "12421ab0cc2b6ea0b29d28761e7206cf68869be6492bef8c5c5aa5a9aa64b0ab"
+    "bytes": 21925,
+    "sha256": "a932a4ce920bf91da9ef33c1bffe969bb948ee81601b209c48024c0692693d1b"
   },
   {
     "path": "core/filesystem/ouncecake/LICENSE",
     "bytes": 18091,
     "sha256": "f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505"
-  },
-  {
-    "path": "engines/CivSwitch/LICENSE",
-    "bytes": 1063,
-    "sha256": "c0675240c74693e44d256a070ddf59f3d99ce7a87c82f8dfa0dbda53f3647053"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/@jridgewell/gen-mapping/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/@jridgewell/resolve-uri/LICENSE",
-    "bytes": 1079,
-    "sha256": "b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/@jridgewell/source-map/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/@jridgewell/sourcemap-codec/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/@jridgewell/trace-mapping/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/acorn/LICENSE",
-    "bytes": 1099,
-    "sha256": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/buffer-from/LICENSE",
-    "bytes": 1078,
-    "sha256": "14275f5c8139d02054c5259d52a88ccbba662a86af18c30f071c8d082dc6004c"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/commander/LICENSE",
-    "bytes": 1098,
-    "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/source-map/LICENSE",
-    "bytes": 1526,
-    "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/source-map-support/LICENSE.md",
-    "bytes": 1079,
-    "sha256": "3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42"
-  },
-  {
-    "path": "engines/CivSwitch/installer-creator/node_modules/terser/LICENSE",
-    "bytes": 1303,
-    "sha256": "901d0a7fcaccaae9917d165039c0473c354e5da2e0e94140dde67aad9ffb19da"
-  },
-  {
-    "path": "engines/CivSwitchLDN/LICENSE",
-    "bytes": 35149,
-    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
-  },
-  {
-    "path": "engines/CivSwitchLDN/THIRD_PARTY_NOTICES.md",
-    "bytes": 3066,
-    "sha256": "45867a66216fa1dddffaa8cf0b092468a67d6a0c9187593469171ac57db622e9"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/@jridgewell/gen-mapping/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/@jridgewell/resolve-uri/LICENSE",
-    "bytes": 1079,
-    "sha256": "b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/@jridgewell/source-map/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/@jridgewell/sourcemap-codec/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/@jridgewell/trace-mapping/LICENSE",
-    "bytes": 1080,
-    "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/acorn/LICENSE",
-    "bytes": 1099,
-    "sha256": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/buffer-from/LICENSE",
-    "bytes": 1078,
-    "sha256": "14275f5c8139d02054c5259d52a88ccbba662a86af18c30f071c8d082dc6004c"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/commander/LICENSE",
-    "bytes": 1098,
-    "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/source-map/LICENSE",
-    "bytes": 1526,
-    "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/source-map-support/LICENSE.md",
-    "bytes": 1079,
-    "sha256": "3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42"
-  },
-  {
-    "path": "engines/CivSwitchLDN/node_modules/terser/LICENSE",
-    "bytes": 1303,
-    "sha256": "901d0a7fcaccaae9917d165039c0473c354e5da2e0e94140dde67aad9ffb19da"
   },
   {
     "path": "engines/iz2s-core/runtime/package/licenses/bzip2/LICENSE",
@@ -421,8 +296,8 @@
   },
   {
     "path": "hardware/devices/cardputer-adv/firmware/NOTICE.txt",
-    "bytes": 2119,
-    "sha256": "fcaf3f0bff5280f1b63330722cf44fa2e1963fb479e420c2ae634be1adfe5c41"
+    "bytes": 1475,
+    "sha256": "044e7df79205e3fcafaba03b7c221262302b8c1304454d121f6fea5d2f34109c"
   },
   {
     "path": "hardware/devices/cardputer-adv/firmware/licenses/Arduino-ESP32.txt",

@@ -51,7 +51,7 @@ async function inspectOwner(pid) {
     const manifest = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
     const state = await fs.readFile(path.join(root, 'data/state/window.json'), 'utf8')
       .then(JSON.parse).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
-    if (manifest.name !== 'iz2s-platform' || args.includes('--preview') ||
+    if (manifest.name !== 'iz2s-sb4' || args.includes('--preview') ||
         (state && (state.pid !== pid || state.preview))) return null;
     const edition = JSON.parse(await fs.readFile(path.join(root, 'distribution/profile.json'), 'utf8')).edition;
     if (!/^(?:RUN\d+|\d+\.\d+(?:\.\d+)?)$/.test(edition)) return null;
@@ -198,7 +198,7 @@ async function stopPanel({pid, owner, root, inspect = inspectOwner,
 async function findStoredOwner({root, port, inspect = inspectOwner}) {
   const candidates = new Set([path.resolve(root)]);
   for (const entry of await fs.readdir(path.dirname(root), {withFileTypes: true}))
-    if (entry.isDirectory() && /^iz2s-platform(?:-run\d+)?$/.test(entry.name))
+    if (entry.isDirectory() && /^iz2s-sb4(?:-run\d+)?$/.test(entry.name))
       candidates.add(path.join(path.dirname(root), entry.name));
   for (const candidate of candidates) {
     try {
@@ -280,7 +280,7 @@ restart = false, idle = waitForIdle, ...options }) {
     throw Error('Port '+port+' belongs to '+(owner.edition||'another panel')+' (PID '+pid+'). Close it before starting 0.25.');
   if (path.resolve(owner.root) === path.resolve(root) && !restart) return false;
   if(path.resolve(owner.root)!==path.resolve(root))await idle({root:owner.root,port,pid,timeout:options.timeout});
-  console.log('Stopping the preceding IZ2S Platform panel before starting this release.');
+  console.log('Stopping the preceding IZ2S SB4 panel before starting this release.');
   await stop({pid, owner, root, inspect, ...options});
   return true;
 }

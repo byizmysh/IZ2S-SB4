@@ -1,8 +1,10 @@
 # Source layout and notices
 
-The root tree contains the 0.25 PC panel, runtime JavaScript, installers, descriptors, resources and retained native source files. Production JavaScript dependencies remain next to their owning components, with their licenses. Application development sources excluded from the end-user installers are under `sources/applications/`.
+The root tree contains the IZ2S SB4 0.25.2 PC panel, runtime JavaScript, installers, descriptors, resources and retained native source files. Production JavaScript dependencies remain next to their owning components, with their licenses. Application development sources excluded from the end-user installers are under `sources/applications/`.
 
 `sources/izpsx/` is extracted from the published IZPSX 0.5.2 source archive with SHA-256 `6fb81fcf01e8db101711528930917adaa4a9ec0a78c1b19323b341af785a687b`. It contains the PCSX-ReARMed vendor snapshot, build files, font and SDK notices, and the `bios.bin` path update. No BIOS or game images are supplied.
+
+`sources/applications/iz2s-cheese/` contains the official IZ2S Cheese 0.8.7 source snapshot (commit `81df2da`), matching the version included in the App Store.
 
 `sources/native-cheese/` retains the available native Cheese integration patch and its original build recipe. That recipe still refers to the developer's pinned external build workspace; it is provenance, not a portable full rebuild command.
 

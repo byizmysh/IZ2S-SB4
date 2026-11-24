@@ -27,13 +27,6 @@
       "licenseStatus": "license-review-required",
       "notes": "Adapter and empty manual folder only. Original repository is fetched on explicit request at the revision above; no upstream server runs during installation.",
       "distribution": "optional-download"
-    },
-    {
-      "id": "civswitch",
-      "repository": "https://github.com/Gezine/CivSwitch",
-      "licenseStatus": "MIT",
-      "distribution": "local-source",
-      "notes": "CivSwitch by Gezine, MIT. RUN22 uses automatic keyboard/controller input on ADV and ARM, original HID descriptors with attribution, marker-based loader verification, and an optional save installer gated by explicit deletion consent."
     }
   ],
   "modules": [

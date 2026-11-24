@@ -58,12 +58,6 @@
     "ff52db358f0f48ed6d80801cf71af6dc6619de69f1d51eb16255f20cb4323f04"
   ],
   "files": {
-    "engines/CivSwitch/launcher/shaders/launcher.vert.spv": "4056325aaa646b0d5992d96c4862211cdf13830058bf45faa0a44be10a09ceff",
-    "engines/CivSwitch/launcher/shaders/launcher.comp.spv": "ef2dab04129add436359e0e3cb966d991e6613f11d2eac049e18a98eaef9c947",
-    "engines/CivSwitch/launcher/shaders/launcher.frag.spv": "831d1263817ed45929cb18a8c4c4c9404f2b3f2a226a4106c1a9b257f50b2ef3",
-    "engines/CivSwitch/launcher/app/app.frag.spv": "5e0dee799b7bcfe0f63fd332c21cf505f4abce1c34822a6f6da7c5b9cb455067",
-    "engines/CivSwitch/launcher/app/app.vert.spv": "4056325aaa646b0d5992d96c4862211cdf13830058bf45faa0a44be10a09ceff",
-    "engines/CivSwitch/launcher/app/app.comp.spv": "9259e5923621663a67f16f054d67b6813e596e9607c25fccec7c76e51926dd60",
     "shells/izlauncher/app/app.frag.spv": "d5495f6dde069d5163ca2b0ed31c9e27ac7a4b6e70029cd81a3fd1fe5bb0ec58",
     "shells/izlauncher/app/app.vert.spv": "4056325aaa646b0d5992d96c4862211cdf13830058bf45faa0a44be10a09ceff",
     "shells/izlauncher/app/app.comp.spv": "8d4603abe19f96d912fa1f63384eb598a5b65dcb522d82648306ce6d781cadb4",

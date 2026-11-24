@@ -3,8 +3,8 @@
 // deliberately not persisted. Legacy global choices never become selections.
 (function(root){
  function scope(state){
-  const civ=['civswitch','civswitch-ldn'].includes(state?.platform?.loaderId);
-  return (civ?'civ7':'sb4')+':'+(civ?state?.civLauncher?.shell||'izlauncher':state?.platform?.variant||'original');
+
+  return (('sb4'))+':'+((state?.platform?.variant||'original'));
  }
  function create(preferences){
   const selected=new Set();let current=null;
