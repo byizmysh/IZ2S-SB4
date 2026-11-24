@@ -188,8 +188,8 @@
       "executable": false
     },
     "README.md": {
-      "bytes": 10729,
-      "sha256": "2322de158ccdc368f95e07b9c09192232474c3584515b8c92e6ebacea81698a9",
+      "bytes": 10600,
+      "sha256": "7fb9607174b325cd850e7abe3f88872d7f520b958a96593e18135cbc83dc8778",
       "executable": false
     },
     "RELEASE-NOTES.md": {
@@ -2337,20 +2337,10 @@
       "sha256": "483449f7a6714f9267fc3e7693b0fcfbb94726363348b9e92700a0d504eff3c1",
       "executable": false
     },
-    "docs/images/iz2s-sb4-connection.png": {
-      "bytes": 196873,
-      "sha256": "890914a671d6c5453020b816f765fe704ab7706a923140198d4c1b55b6c70823",
-      "executable": false
-    },
-    "docs/images/iz2s-sb4-devices.png": {
-      "bytes": 268371,
-      "sha256": "c55ea32453fe63448dab9305b59ec086727651c6f43fd5b8e8ad7df0aa458468",
-      "executable": false
-    },
-    "docs/images/iz2s-sb4-first-setup.png": {
-      "bytes": 194226,
-      "sha256": "b2fd7fd7860374c7d9578708f1631675ed70a7a868d9b63a01795fcc8033a9a1",
-      "executable": false
+    "docs/images/iz2s-sb4-launcher.png": {
+      "executable": false,
+      "bytes": 881195,
+      "sha256": "c600ee9d28116f614ea77fd3a4eb3940a3a398e3210479e244daf4a64791e1db"
     },
     "engines/common.cjs": {
       "bytes": 2576,

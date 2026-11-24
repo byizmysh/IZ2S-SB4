@@ -14,13 +14,9 @@ The SmileBASIC 4 edition is maintained separately from [IZ2S Platform](https://g
 
 ## Screenshots
 
-![IZ2S SB4 connection panel](docs/images/iz2s-sb4-connection.png)
+![IZ2S SB4 panel menu](docs/images/iz2s-sb4-app-store.png)
 
-![IZ2S SB4 App Store](docs/images/iz2s-sb4-app-store.png)
-
-![IZ2S SB4 first setup](docs/images/iz2s-sb4-first-setup.png)
-
-![IZ2S SB4 input devices](docs/images/iz2s-sb4-devices.png)
+![IZ2S console launcher](docs/images/iz2s-sb4-launcher.png)
 
 ## Before installation
 
